@@ -1,0 +1,1122 @@
+{
+  "kind": "tournament-export",
+  "schemaVersion": 1,
+  "exportedAt": "2026-10-26T21:07:15.106Z",
+  "tournament": {
+    "id": "t_5bc38849-8164-42e1-905e-017589ff1514",
+    "name": "Test Event",
+    "format": "SWISS",
+    "status": "COMPLETE",
+    "players": [
+      {
+        "id": "p_436780f1-b955-491e-929b-013884b483a6",
+        "displayName": "P1",
+        "status": "ACTIVE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "seed": 1
+      },
+      {
+        "id": "p_b1767473-a590-4902-b3f6-ce81abca4d8f",
+        "displayName": "P2",
+        "status": "ACTIVE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "seed": 2
+      },
+      {
+        "id": "p_98ea9a7d-8cbf-410f-a13d-41de7489afe9",
+        "displayName": "P3",
+        "status": "ACTIVE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "seed": 3
+      },
+      {
+        "id": "p_38716cab-0780-4c08-9127-fde4139390eb",
+        "displayName": "P4",
+        "status": "ACTIVE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "seed": 4
+      },
+      {
+        "id": "p_f82f5a9b-4f43-4171-8b1e-e3bed8edb82c",
+        "displayName": "P5",
+        "status": "DROPPED",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "seed": 5,
+        "statusReason": "had to leave",
+        "statusChangedAt": "2026-10-26T21:07:15.101Z",
+        "statusRoundNumber": 1
+      },
+      {
+        "id": "p_bf5c1d2a-59e2-4120-93eb-e41818f9c540",
+        "displayName": "P6",
+        "status": "ACTIVE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "seed": 6
+      },
+      {
+        "id": "p_cc150328-b605-4ded-8a18-2c49f493216a",
+        "displayName": "P7",
+        "status": "DISQUALIFIED",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "seed": 7,
+        "statusReason": "deck list problem",
+        "statusChangedAt": "2026-10-26T21:07:15.101Z",
+        "statusRoundNumber": 1
+      },
+      {
+        "id": "p_bd3b3f1e-46a8-4313-9f54-8bd9294d9276",
+        "displayName": "P8",
+        "status": "ACTIVE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "seed": 8
+      },
+      {
+        "id": "p_a58b94e8-3965-430a-9dfd-0f9d36090647",
+        "displayName": "P9",
+        "status": "ACTIVE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "seed": 9
+      },
+      {
+        "id": "p_3fa6f4a7-4bf4-4943-87c3-78c449a33214",
+        "displayName": "P10",
+        "status": "ACTIVE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "seed": 10
+      },
+      {
+        "id": "p_69e1355c-739e-491e-9fa7-ff3668260dbf",
+        "displayName": "P11",
+        "status": "ACTIVE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "seed": 11
+      },
+      {
+        "id": "p_fae27a65-4fa3-4aa1-8304-9eec862e873a",
+        "displayName": "P12",
+        "status": "ACTIVE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "seed": 12
+      },
+      {
+        "id": "p_7c8c2148-7fe0-426a-91cb-70071374829f",
+        "displayName": "P13",
+        "status": "ACTIVE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "seed": 13
+      },
+      {
+        "id": "p_42816013-8bc2-4736-a790-5e69f3df5861",
+        "displayName": "P14",
+        "status": "ACTIVE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "seed": 14
+      },
+      {
+        "id": "p_1e1ebe4b-b9b7-4a9c-a73e-6cf46ce3e2d7",
+        "displayName": "P15",
+        "status": "ACTIVE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "seed": 15
+      }
+    ],
+    "rounds": [
+      {
+        "id": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd",
+        "number": 1,
+        "name": "Round 1",
+        "status": "COMPLETE",
+        "matchIds": [
+          "m_aed05727-5a8a-4d07-bf54-42000fc770bf",
+          "m_ba7dab3d-d5e2-4e16-bed3-6b0409125820",
+          "m_dcf50c9d-031c-46e9-9823-0e275bc6db04",
+          "m_62cbb504-025e-4660-aceb-3a78065e8681",
+          "m_8c35e134-7ef6-4176-9129-85d3e1054515",
+          "m_42e59bd9-1497-48c5-952d-a5ee3c8ca134",
+          "m_6a69235b-9c49-4b6e-8c64-19246513f00b",
+          "m_e6a6ed5d-686c-4350-9839-5e730cc04fa9"
+        ],
+        "createdAt": "2026-10-26T21:07:15.100Z"
+      },
+      {
+        "id": "rnd_fb2dfe67-9213-4cc3-9b19-7154b8193165",
+        "number": 2,
+        "name": "Round 2",
+        "status": "COMPLETE",
+        "matchIds": [
+          "m_123a473d-d887-447b-8261-381794bdcf55",
+          "m_0dadb185-ddb9-4419-803b-d7927d9608ac",
+          "m_83a7868a-e0ca-4e04-b14e-f2ca86fae55a",
+          "m_5e29c123-0fc0-4d49-af37-2333ff560ced",
+          "m_c484d99d-579c-4fa1-83b3-07137f427a0f",
+          "m_76f1e9fe-bd9c-4958-93df-0ff4693efbbf",
+          "m_35a74a1d-af2b-4e58-8379-3319e51181da"
+        ],
+        "createdAt": "2026-10-26T21:07:15.102Z"
+      },
+      {
+        "id": "rnd_c81e5663-63bc-40b0-80ba-a7108a7b2852",
+        "number": 3,
+        "name": "Round 3",
+        "status": "COMPLETE",
+        "matchIds": [
+          "m_88ba48ea-9613-430b-811a-0fb0929e3062",
+          "m_14e7a12a-8495-4ab7-903e-0fccc207201e",
+          "m_cbceab77-bbe2-4a69-b921-7c25494a7d43",
+          "m_765a1f20-d098-4852-b55e-20cc7d63038f",
+          "m_137d6bc4-cc72-4e61-a523-db73b5082e99",
+          "m_41a1c20e-2caa-4747-b20f-0ad651f0f738",
+          "m_5b3fb795-4da6-4557-be2a-7831aedcb447"
+        ],
+        "createdAt": "2026-10-26T21:07:15.102Z"
+      },
+      {
+        "id": "rnd_b3cc9814-4570-46aa-9df3-3ea8f51f53c2",
+        "number": 4,
+        "name": "Round 4",
+        "status": "COMPLETE",
+        "matchIds": [
+          "m_fb7b5551-40da-428d-985f-c8f75c0de2db",
+          "m_cd7fda04-2246-4e0b-b91e-fbb514f83280",
+          "m_77a89468-5f47-407a-9701-0330b382b36f",
+          "m_e8a3d50c-e2ca-4829-883c-6c25c3569d7c",
+          "m_aacf39ee-e937-43b0-a9c3-1533eac3c4fd",
+          "m_a5fd4866-08ea-4ee1-b263-130a00e5e28f",
+          "m_6d997623-7e6e-4cc5-b23d-8760b8e197c0"
+        ],
+        "createdAt": "2026-10-26T21:07:15.104Z"
+      }
+    ],
+    "matches": [
+      {
+        "id": "m_aed05727-5a8a-4d07-bf54-42000fc770bf",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd",
+        "roundNumber": 1,
+        "playerAId": "p_436780f1-b955-491e-929b-013884b483a6",
+        "playerBId": "p_bd3b3f1e-46a8-4313-9f54-8bd9294d9276",
+        "tableNumber": 1,
+        "completedAt": "2026-10-26T21:07:15.100Z"
+      },
+      {
+        "id": "m_ba7dab3d-d5e2-4e16-bed3-6b0409125820",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd",
+        "roundNumber": 1,
+        "playerAId": "p_b1767473-a590-4902-b3f6-ce81abca4d8f",
+        "playerBId": "p_a58b94e8-3965-430a-9dfd-0f9d36090647",
+        "tableNumber": 2,
+        "completedAt": "2026-10-26T21:07:15.100Z"
+      },
+      {
+        "id": "m_dcf50c9d-031c-46e9-9823-0e275bc6db04",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd",
+        "roundNumber": 1,
+        "playerAId": "p_98ea9a7d-8cbf-410f-a13d-41de7489afe9",
+        "playerBId": "p_3fa6f4a7-4bf4-4943-87c3-78c449a33214",
+        "tableNumber": 3,
+        "completedAt": "2026-10-26T21:07:15.100Z"
+      },
+      {
+        "id": "m_62cbb504-025e-4660-aceb-3a78065e8681",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd",
+        "roundNumber": 1,
+        "playerAId": "p_38716cab-0780-4c08-9127-fde4139390eb",
+        "playerBId": "p_69e1355c-739e-491e-9fa7-ff3668260dbf",
+        "tableNumber": 4,
+        "completedAt": "2026-10-26T21:07:15.100Z"
+      },
+      {
+        "id": "m_8c35e134-7ef6-4176-9129-85d3e1054515",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd",
+        "roundNumber": 1,
+        "playerAId": "p_f82f5a9b-4f43-4171-8b1e-e3bed8edb82c",
+        "playerBId": "p_fae27a65-4fa3-4aa1-8304-9eec862e873a",
+        "tableNumber": 5,
+        "completedAt": "2026-10-26T21:07:15.100Z"
+      },
+      {
+        "id": "m_42e59bd9-1497-48c5-952d-a5ee3c8ca134",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd",
+        "roundNumber": 1,
+        "playerAId": "p_bf5c1d2a-59e2-4120-93eb-e41818f9c540",
+        "playerBId": "p_7c8c2148-7fe0-426a-91cb-70071374829f",
+        "tableNumber": 6,
+        "completedAt": "2026-10-26T21:07:15.100Z"
+      },
+      {
+        "id": "m_6a69235b-9c49-4b6e-8c64-19246513f00b",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd",
+        "roundNumber": 1,
+        "playerAId": "p_cc150328-b605-4ded-8a18-2c49f493216a",
+        "playerBId": "p_42816013-8bc2-4736-a790-5e69f3df5861",
+        "tableNumber": 7,
+        "completedAt": "2026-10-26T21:07:15.101Z"
+      },
+      {
+        "id": "m_e6a6ed5d-686c-4350-9839-5e730cc04fa9",
+        "result": "BYE",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.100Z",
+        "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd",
+        "roundNumber": 1,
+        "playerAId": "p_1e1ebe4b-b9b7-4a9c-a73e-6cf46ce3e2d7",
+        "completedAt": "2026-10-26T21:07:15.100Z",
+        "tableNumber": 8
+      },
+      {
+        "id": "m_123a473d-d887-447b-8261-381794bdcf55",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.102Z",
+        "roundId": "rnd_fb2dfe67-9213-4cc3-9b19-7154b8193165",
+        "roundNumber": 2,
+        "playerAId": "p_436780f1-b955-491e-929b-013884b483a6",
+        "playerBId": "p_b1767473-a590-4902-b3f6-ce81abca4d8f",
+        "tableNumber": 1,
+        "completedAt": "2026-10-26T21:07:15.102Z"
+      },
+      {
+        "id": "m_0dadb185-ddb9-4419-803b-d7927d9608ac",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.102Z",
+        "roundId": "rnd_fb2dfe67-9213-4cc3-9b19-7154b8193165",
+        "roundNumber": 2,
+        "playerAId": "p_98ea9a7d-8cbf-410f-a13d-41de7489afe9",
+        "playerBId": "p_38716cab-0780-4c08-9127-fde4139390eb",
+        "tableNumber": 2,
+        "completedAt": "2026-10-26T21:07:15.102Z"
+      },
+      {
+        "id": "m_83a7868a-e0ca-4e04-b14e-f2ca86fae55a",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.102Z",
+        "roundId": "rnd_fb2dfe67-9213-4cc3-9b19-7154b8193165",
+        "roundNumber": 2,
+        "playerAId": "p_bf5c1d2a-59e2-4120-93eb-e41818f9c540",
+        "playerBId": "p_1e1ebe4b-b9b7-4a9c-a73e-6cf46ce3e2d7",
+        "tableNumber": 3,
+        "completedAt": "2026-10-26T21:07:15.102Z"
+      },
+      {
+        "id": "m_5e29c123-0fc0-4d49-af37-2333ff560ced",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.102Z",
+        "roundId": "rnd_fb2dfe67-9213-4cc3-9b19-7154b8193165",
+        "roundNumber": 2,
+        "playerAId": "p_bd3b3f1e-46a8-4313-9f54-8bd9294d9276",
+        "playerBId": "p_a58b94e8-3965-430a-9dfd-0f9d36090647",
+        "tableNumber": 4,
+        "completedAt": "2026-10-26T21:07:15.102Z"
+      },
+      {
+        "id": "m_c484d99d-579c-4fa1-83b3-07137f427a0f",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.102Z",
+        "roundId": "rnd_fb2dfe67-9213-4cc3-9b19-7154b8193165",
+        "roundNumber": 2,
+        "playerAId": "p_3fa6f4a7-4bf4-4943-87c3-78c449a33214",
+        "playerBId": "p_69e1355c-739e-491e-9fa7-ff3668260dbf",
+        "tableNumber": 5,
+        "completedAt": "2026-10-26T21:07:15.102Z"
+      },
+      {
+        "id": "m_76f1e9fe-bd9c-4958-93df-0ff4693efbbf",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.102Z",
+        "roundId": "rnd_fb2dfe67-9213-4cc3-9b19-7154b8193165",
+        "roundNumber": 2,
+        "playerAId": "p_fae27a65-4fa3-4aa1-8304-9eec862e873a",
+        "playerBId": "p_7c8c2148-7fe0-426a-91cb-70071374829f",
+        "tableNumber": 6,
+        "completedAt": "2026-10-26T21:07:15.102Z"
+      },
+      {
+        "id": "m_35a74a1d-af2b-4e58-8379-3319e51181da",
+        "result": "BYE",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.102Z",
+        "roundId": "rnd_fb2dfe67-9213-4cc3-9b19-7154b8193165",
+        "roundNumber": 2,
+        "playerAId": "p_42816013-8bc2-4736-a790-5e69f3df5861",
+        "completedAt": "2026-10-26T21:07:15.102Z",
+        "tableNumber": 7
+      },
+      {
+        "id": "m_88ba48ea-9613-430b-811a-0fb0929e3062",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.102Z",
+        "roundId": "rnd_c81e5663-63bc-40b0-80ba-a7108a7b2852",
+        "roundNumber": 3,
+        "playerAId": "p_436780f1-b955-491e-929b-013884b483a6",
+        "playerBId": "p_98ea9a7d-8cbf-410f-a13d-41de7489afe9",
+        "tableNumber": 1,
+        "completedAt": "2026-10-26T21:07:15.103Z"
+      },
+      {
+        "id": "m_14e7a12a-8495-4ab7-903e-0fccc207201e",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.102Z",
+        "roundId": "rnd_c81e5663-63bc-40b0-80ba-a7108a7b2852",
+        "roundNumber": 3,
+        "playerAId": "p_bf5c1d2a-59e2-4120-93eb-e41818f9c540",
+        "playerBId": "p_42816013-8bc2-4736-a790-5e69f3df5861",
+        "tableNumber": 2,
+        "completedAt": "2026-10-26T21:07:15.103Z"
+      },
+      {
+        "id": "m_cbceab77-bbe2-4a69-b921-7c25494a7d43",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.102Z",
+        "roundId": "rnd_c81e5663-63bc-40b0-80ba-a7108a7b2852",
+        "roundNumber": 3,
+        "playerAId": "p_1e1ebe4b-b9b7-4a9c-a73e-6cf46ce3e2d7",
+        "playerBId": "p_b1767473-a590-4902-b3f6-ce81abca4d8f",
+        "tableNumber": 3,
+        "completedAt": "2026-10-26T21:07:15.103Z"
+      },
+      {
+        "id": "m_765a1f20-d098-4852-b55e-20cc7d63038f",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.102Z",
+        "roundId": "rnd_c81e5663-63bc-40b0-80ba-a7108a7b2852",
+        "roundNumber": 3,
+        "playerAId": "p_38716cab-0780-4c08-9127-fde4139390eb",
+        "playerBId": "p_bd3b3f1e-46a8-4313-9f54-8bd9294d9276",
+        "tableNumber": 4,
+        "completedAt": "2026-10-26T21:07:15.103Z"
+      },
+      {
+        "id": "m_137d6bc4-cc72-4e61-a523-db73b5082e99",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.102Z",
+        "roundId": "rnd_c81e5663-63bc-40b0-80ba-a7108a7b2852",
+        "roundNumber": 3,
+        "playerAId": "p_3fa6f4a7-4bf4-4943-87c3-78c449a33214",
+        "playerBId": "p_fae27a65-4fa3-4aa1-8304-9eec862e873a",
+        "tableNumber": 5,
+        "completedAt": "2026-10-26T21:07:15.103Z"
+      },
+      {
+        "id": "m_41a1c20e-2caa-4747-b20f-0ad651f0f738",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.102Z",
+        "roundId": "rnd_c81e5663-63bc-40b0-80ba-a7108a7b2852",
+        "roundNumber": 3,
+        "playerAId": "p_7c8c2148-7fe0-426a-91cb-70071374829f",
+        "playerBId": "p_a58b94e8-3965-430a-9dfd-0f9d36090647",
+        "tableNumber": 6,
+        "completedAt": "2026-10-26T21:07:15.104Z"
+      },
+      {
+        "id": "m_5b3fb795-4da6-4557-be2a-7831aedcb447",
+        "result": "BYE",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.102Z",
+        "roundId": "rnd_c81e5663-63bc-40b0-80ba-a7108a7b2852",
+        "roundNumber": 3,
+        "playerAId": "p_69e1355c-739e-491e-9fa7-ff3668260dbf",
+        "completedAt": "2026-10-26T21:07:15.102Z",
+        "tableNumber": 7
+      },
+      {
+        "id": "m_fb7b5551-40da-428d-985f-c8f75c0de2db",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.104Z",
+        "roundId": "rnd_b3cc9814-4570-46aa-9df3-3ea8f51f53c2",
+        "roundNumber": 4,
+        "playerAId": "p_bf5c1d2a-59e2-4120-93eb-e41818f9c540",
+        "playerBId": "p_436780f1-b955-491e-929b-013884b483a6",
+        "tableNumber": 1,
+        "completedAt": "2026-10-26T21:07:15.104Z"
+      },
+      {
+        "id": "m_cd7fda04-2246-4e0b-b91e-fbb514f83280",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.104Z",
+        "roundId": "rnd_b3cc9814-4570-46aa-9df3-3ea8f51f53c2",
+        "roundNumber": 4,
+        "playerAId": "p_98ea9a7d-8cbf-410f-a13d-41de7489afe9",
+        "playerBId": "p_1e1ebe4b-b9b7-4a9c-a73e-6cf46ce3e2d7",
+        "tableNumber": 2,
+        "completedAt": "2026-10-26T21:07:15.104Z"
+      },
+      {
+        "id": "m_77a89468-5f47-407a-9701-0330b382b36f",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.104Z",
+        "roundId": "rnd_b3cc9814-4570-46aa-9df3-3ea8f51f53c2",
+        "roundNumber": 4,
+        "playerAId": "p_38716cab-0780-4c08-9127-fde4139390eb",
+        "playerBId": "p_3fa6f4a7-4bf4-4943-87c3-78c449a33214",
+        "tableNumber": 3,
+        "completedAt": "2026-10-26T21:07:15.105Z"
+      },
+      {
+        "id": "m_e8a3d50c-e2ca-4829-883c-6c25c3569d7c",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.104Z",
+        "roundId": "rnd_b3cc9814-4570-46aa-9df3-3ea8f51f53c2",
+        "roundNumber": 4,
+        "playerAId": "p_42816013-8bc2-4736-a790-5e69f3df5861",
+        "playerBId": "p_b1767473-a590-4902-b3f6-ce81abca4d8f",
+        "tableNumber": 4,
+        "completedAt": "2026-10-26T21:07:15.105Z"
+      },
+      {
+        "id": "m_aacf39ee-e937-43b0-a9c3-1533eac3c4fd",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.104Z",
+        "roundId": "rnd_b3cc9814-4570-46aa-9df3-3ea8f51f53c2",
+        "roundNumber": 4,
+        "playerAId": "p_69e1355c-739e-491e-9fa7-ff3668260dbf",
+        "playerBId": "p_fae27a65-4fa3-4aa1-8304-9eec862e873a",
+        "tableNumber": 5,
+        "completedAt": "2026-10-26T21:07:15.105Z"
+      },
+      {
+        "id": "m_a5fd4866-08ea-4ee1-b263-130a00e5e28f",
+        "result": "PLAYER_A_WIN",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.104Z",
+        "roundId": "rnd_b3cc9814-4570-46aa-9df3-3ea8f51f53c2",
+        "roundNumber": 4,
+        "playerAId": "p_bd3b3f1e-46a8-4313-9f54-8bd9294d9276",
+        "playerBId": "p_7c8c2148-7fe0-426a-91cb-70071374829f",
+        "tableNumber": 6,
+        "completedAt": "2026-10-26T21:07:15.105Z"
+      },
+      {
+        "id": "m_6d997623-7e6e-4cc5-b23d-8760b8e197c0",
+        "result": "BYE",
+        "status": "COMPLETE",
+        "createdAt": "2026-10-26T21:07:15.104Z",
+        "roundId": "rnd_b3cc9814-4570-46aa-9df3-3ea8f51f53c2",
+        "roundNumber": 4,
+        "playerAId": "p_a58b94e8-3965-430a-9dfd-0f9d36090647",
+        "completedAt": "2026-10-26T21:07:15.104Z",
+        "tableNumber": 7
+      }
+    ],
+    "penalties": [],
+    "warnings": [
+      {
+        "id": "warn_827ac752-0b24-44eb-8720-447bbc45831f",
+        "playerId": "p_98ea9a7d-8cbf-410f-a13d-41de7489afe9",
+        "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd",
+        "reason": "Slow play",
+        "createdAt": "2026-10-26T21:07:15.101Z",
+        "active": true
+      }
+    ],
+    "events": [
+      {
+        "id": "evt_d63239d5-cec9-4078-843f-1cca021f9492",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "TOURNAMENT_CREATED",
+        "description": "Tournament \"Test Event\" created (SWISS)"
+      },
+      {
+        "id": "evt_56c13d19-1f8e-4f6d-a203-7fbe0fbf56b5",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "PLAYER_REGISTERED",
+        "description": "P1 registered",
+        "entityIds": {
+          "playerId": "p_436780f1-b955-491e-929b-013884b483a6"
+        }
+      },
+      {
+        "id": "evt_297a3443-7832-494a-84b8-2b8489f8eb80",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "PLAYER_REGISTERED",
+        "description": "P2 registered",
+        "entityIds": {
+          "playerId": "p_b1767473-a590-4902-b3f6-ce81abca4d8f"
+        }
+      },
+      {
+        "id": "evt_2ae5c768-db56-47f5-b702-e1c33ec45817",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "PLAYER_REGISTERED",
+        "description": "P3 registered",
+        "entityIds": {
+          "playerId": "p_98ea9a7d-8cbf-410f-a13d-41de7489afe9"
+        }
+      },
+      {
+        "id": "evt_277c4545-3fd1-42f4-b776-0ecfa0a89e1d",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "PLAYER_REGISTERED",
+        "description": "P4 registered",
+        "entityIds": {
+          "playerId": "p_38716cab-0780-4c08-9127-fde4139390eb"
+        }
+      },
+      {
+        "id": "evt_872314b9-7256-4582-8f1e-b1b1ad4126f0",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "PLAYER_REGISTERED",
+        "description": "P5 registered",
+        "entityIds": {
+          "playerId": "p_f82f5a9b-4f43-4171-8b1e-e3bed8edb82c"
+        }
+      },
+      {
+        "id": "evt_21772842-6b01-438f-85d2-977d2cc9d936",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "PLAYER_REGISTERED",
+        "description": "P6 registered",
+        "entityIds": {
+          "playerId": "p_bf5c1d2a-59e2-4120-93eb-e41818f9c540"
+        }
+      },
+      {
+        "id": "evt_8d78e699-e28a-472a-b175-4698a58ed5a9",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "PLAYER_REGISTERED",
+        "description": "P7 registered",
+        "entityIds": {
+          "playerId": "p_cc150328-b605-4ded-8a18-2c49f493216a"
+        }
+      },
+      {
+        "id": "evt_de75f12f-e837-4687-b579-55dfc247448e",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "PLAYER_REGISTERED",
+        "description": "P8 registered",
+        "entityIds": {
+          "playerId": "p_bd3b3f1e-46a8-4313-9f54-8bd9294d9276"
+        }
+      },
+      {
+        "id": "evt_3d550075-9544-4c6b-b744-b6807eaffa5d",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "PLAYER_REGISTERED",
+        "description": "P9 registered",
+        "entityIds": {
+          "playerId": "p_a58b94e8-3965-430a-9dfd-0f9d36090647"
+        }
+      },
+      {
+        "id": "evt_de544edc-484e-4f21-ad2e-ffec90f4be5a",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "PLAYER_REGISTERED",
+        "description": "P10 registered",
+        "entityIds": {
+          "playerId": "p_3fa6f4a7-4bf4-4943-87c3-78c449a33214"
+        }
+      },
+      {
+        "id": "evt_92f741fa-5cfa-4dfe-9456-2facdd0f8f13",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "PLAYER_REGISTERED",
+        "description": "P11 registered",
+        "entityIds": {
+          "playerId": "p_69e1355c-739e-491e-9fa7-ff3668260dbf"
+        }
+      },
+      {
+        "id": "evt_8ea5e42e-5e88-433a-be62-ea8911efa7d3",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "PLAYER_REGISTERED",
+        "description": "P12 registered",
+        "entityIds": {
+          "playerId": "p_fae27a65-4fa3-4aa1-8304-9eec862e873a"
+        }
+      },
+      {
+        "id": "evt_cc6f7a3b-7547-4b65-973e-cd4c31bb5f02",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "PLAYER_REGISTERED",
+        "description": "P13 registered",
+        "entityIds": {
+          "playerId": "p_7c8c2148-7fe0-426a-91cb-70071374829f"
+        }
+      },
+      {
+        "id": "evt_351508af-a751-4434-9824-15d2922062d5",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "PLAYER_REGISTERED",
+        "description": "P14 registered",
+        "entityIds": {
+          "playerId": "p_42816013-8bc2-4736-a790-5e69f3df5861"
+        }
+      },
+      {
+        "id": "evt_5f00334d-83dc-4ecc-9e24-50188fcf0f79",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "PLAYER_REGISTERED",
+        "description": "P15 registered",
+        "entityIds": {
+          "playerId": "p_1e1ebe4b-b9b7-4a9c-a73e-6cf46ce3e2d7"
+        }
+      },
+      {
+        "id": "evt_c58443c4-ca45-4f0b-8f99-322c455a1e0a",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P15 receives a bye",
+        "entityIds": {
+          "matchId": "m_e6a6ed5d-686c-4350-9839-5e730cc04fa9",
+          "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd",
+          "playerId": "p_1e1ebe4b-b9b7-4a9c-a73e-6cf46ce3e2d7"
+        }
+      },
+      {
+        "id": "evt_f155b755-83cc-4788-910c-684501917c90",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "TOURNAMENT_STARTED",
+        "description": "Tournament started with 15 players",
+        "metadata": {
+          "format": "SWISS"
+        }
+      },
+      {
+        "id": "evt_791d1055-a16c-48ac-9ce3-5b8c57d93ff0",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "ROUND_CREATED",
+        "description": "Round 1 generated (8 matches)",
+        "entityIds": {
+          "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd"
+        }
+      },
+      {
+        "id": "evt_d6430bbf-a4bb-4e03-8b19-da83fa8ef840",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P1 defeated P8",
+        "entityIds": {
+          "matchId": "m_aed05727-5a8a-4d07-bf54-42000fc770bf",
+          "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd"
+        }
+      },
+      {
+        "id": "evt_b408e33a-d0c2-4e32-b80b-2bbab351687f",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P2 defeated P9",
+        "entityIds": {
+          "matchId": "m_ba7dab3d-d5e2-4e16-bed3-6b0409125820",
+          "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd"
+        }
+      },
+      {
+        "id": "evt_c38afa9d-b49a-439c-b453-9ef08b8470b3",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P3 defeated P10",
+        "entityIds": {
+          "matchId": "m_dcf50c9d-031c-46e9-9823-0e275bc6db04",
+          "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd"
+        }
+      },
+      {
+        "id": "evt_223cfc57-8b6c-49c1-8365-1f9ea7759c71",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P4 defeated P11",
+        "entityIds": {
+          "matchId": "m_62cbb504-025e-4660-aceb-3a78065e8681",
+          "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd"
+        }
+      },
+      {
+        "id": "evt_33a482b6-8cef-4403-b54f-90a78686a3a3",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P5 defeated P12",
+        "entityIds": {
+          "matchId": "m_8c35e134-7ef6-4176-9129-85d3e1054515",
+          "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd"
+        }
+      },
+      {
+        "id": "evt_09d121a1-19a4-413b-9414-ac1d27862ecc",
+        "timestamp": "2026-10-26T21:07:15.100Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P6 defeated P13",
+        "entityIds": {
+          "matchId": "m_42e59bd9-1497-48c5-952d-a5ee3c8ca134",
+          "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd"
+        }
+      },
+      {
+        "id": "evt_3d033e2b-8c0d-4264-8649-b72039d3d475",
+        "timestamp": "2026-10-26T21:07:15.101Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P7 defeated P14",
+        "entityIds": {
+          "matchId": "m_6a69235b-9c49-4b6e-8c64-19246513f00b",
+          "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd"
+        }
+      },
+      {
+        "id": "evt_b8ae5770-8788-4e21-8956-d148ec66a494",
+        "timestamp": "2026-10-26T21:07:15.101Z",
+        "type": "ROUND_COMPLETED",
+        "description": "Round 1 completed",
+        "entityIds": {
+          "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd"
+        }
+      },
+      {
+        "id": "evt_659fec32-ea1c-45a6-a21d-67ea376f765f",
+        "timestamp": "2026-10-26T21:07:15.101Z",
+        "type": "WARNING_ISSUED",
+        "description": "P3 received warning: Slow play",
+        "entityIds": {
+          "playerId": "p_98ea9a7d-8cbf-410f-a13d-41de7489afe9",
+          "warningId": "warn_827ac752-0b24-44eb-8720-447bbc45831f",
+          "roundId": "rnd_a9af511d-23fb-44d6-a4f0-f1a532b2aedd"
+        }
+      },
+      {
+        "id": "evt_f70a230f-2065-469a-9a45-e2c39189574f",
+        "timestamp": "2026-10-26T21:07:15.101Z",
+        "type": "PLAYER_DROPPED",
+        "description": "P5 dropped (had to leave)",
+        "entityIds": {
+          "playerId": "p_f82f5a9b-4f43-4171-8b1e-e3bed8edb82c"
+        }
+      },
+      {
+        "id": "evt_0b2c2c2a-9cdf-4e73-88cd-de041fbd5bb4",
+        "timestamp": "2026-10-26T21:07:15.101Z",
+        "type": "PLAYER_DISQUALIFIED",
+        "description": "P7 disqualified — deck list problem",
+        "entityIds": {
+          "playerId": "p_cc150328-b605-4ded-8a18-2c49f493216a"
+        },
+        "metadata": {
+          "reason": "deck list problem"
+        }
+      },
+      {
+        "id": "evt_470aae50-17b2-463c-a274-4f2e829ab89b",
+        "timestamp": "2026-10-26T21:07:15.102Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P14 receives a bye",
+        "entityIds": {
+          "matchId": "m_35a74a1d-af2b-4e58-8379-3319e51181da",
+          "roundId": "rnd_fb2dfe67-9213-4cc3-9b19-7154b8193165",
+          "playerId": "p_42816013-8bc2-4736-a790-5e69f3df5861"
+        }
+      },
+      {
+        "id": "evt_a812d8f2-f0c6-4b48-b632-14f7f0455312",
+        "timestamp": "2026-10-26T21:07:15.102Z",
+        "type": "ROUND_CREATED",
+        "description": "Round 2 generated (7 matches, bye: P14)",
+        "entityIds": {
+          "roundId": "rnd_fb2dfe67-9213-4cc3-9b19-7154b8193165"
+        }
+      },
+      {
+        "id": "evt_c0704692-bb18-410b-b0b7-83b6cdb38840",
+        "timestamp": "2026-10-26T21:07:15.102Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P1 defeated P2",
+        "entityIds": {
+          "matchId": "m_123a473d-d887-447b-8261-381794bdcf55",
+          "roundId": "rnd_fb2dfe67-9213-4cc3-9b19-7154b8193165"
+        }
+      },
+      {
+        "id": "evt_8d2e8af5-ca2a-4476-bc97-067e554d450f",
+        "timestamp": "2026-10-26T21:07:15.102Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P3 defeated P4",
+        "entityIds": {
+          "matchId": "m_0dadb185-ddb9-4419-803b-d7927d9608ac",
+          "roundId": "rnd_fb2dfe67-9213-4cc3-9b19-7154b8193165"
+        }
+      },
+      {
+        "id": "evt_0fa78fd6-c0db-4d95-b8fe-a19213bf0513",
+        "timestamp": "2026-10-26T21:07:15.102Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P6 defeated P15",
+        "entityIds": {
+          "matchId": "m_83a7868a-e0ca-4e04-b14e-f2ca86fae55a",
+          "roundId": "rnd_fb2dfe67-9213-4cc3-9b19-7154b8193165"
+        }
+      },
+      {
+        "id": "evt_32069429-be3a-41e1-b948-b0a5ede1ec57",
+        "timestamp": "2026-10-26T21:07:15.102Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P8 defeated P9",
+        "entityIds": {
+          "matchId": "m_5e29c123-0fc0-4d49-af37-2333ff560ced",
+          "roundId": "rnd_fb2dfe67-9213-4cc3-9b19-7154b8193165"
+        }
+      },
+      {
+        "id": "evt_6dcae789-8279-47df-94d5-f7f92ed74a21",
+        "timestamp": "2026-10-26T21:07:15.102Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P10 defeated P11",
+        "entityIds": {
+          "matchId": "m_c484d99d-579c-4fa1-83b3-07137f427a0f",
+          "roundId": "rnd_fb2dfe67-9213-4cc3-9b19-7154b8193165"
+        }
+      },
+      {
+        "id": "evt_27b98e00-c445-4f42-beee-f42df0ff2064",
+        "timestamp": "2026-10-26T21:07:15.102Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P12 defeated P13",
+        "entityIds": {
+          "matchId": "m_76f1e9fe-bd9c-4958-93df-0ff4693efbbf",
+          "roundId": "rnd_fb2dfe67-9213-4cc3-9b19-7154b8193165"
+        }
+      },
+      {
+        "id": "evt_2321545e-ac0d-46ee-9611-22a0c43005ed",
+        "timestamp": "2026-10-26T21:07:15.102Z",
+        "type": "ROUND_COMPLETED",
+        "description": "Round 2 completed",
+        "entityIds": {
+          "roundId": "rnd_fb2dfe67-9213-4cc3-9b19-7154b8193165"
+        }
+      },
+      {
+        "id": "evt_5602ff9d-5145-4b4f-b669-5bb9dd941f0a",
+        "timestamp": "2026-10-26T21:07:15.102Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P11 receives a bye",
+        "entityIds": {
+          "matchId": "m_5b3fb795-4da6-4557-be2a-7831aedcb447",
+          "roundId": "rnd_c81e5663-63bc-40b0-80ba-a7108a7b2852",
+          "playerId": "p_69e1355c-739e-491e-9fa7-ff3668260dbf"
+        }
+      },
+      {
+        "id": "evt_811b108b-685b-41f9-8418-2d8f4279b692",
+        "timestamp": "2026-10-26T21:07:15.102Z",
+        "type": "ROUND_CREATED",
+        "description": "Round 3 generated (7 matches, bye: P11)",
+        "entityIds": {
+          "roundId": "rnd_c81e5663-63bc-40b0-80ba-a7108a7b2852"
+        }
+      },
+      {
+        "id": "evt_f167e6e6-6f47-4253-844f-e5bcea46bd81",
+        "timestamp": "2026-10-26T21:07:15.103Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P1 defeated P3",
+        "entityIds": {
+          "matchId": "m_88ba48ea-9613-430b-811a-0fb0929e3062",
+          "roundId": "rnd_c81e5663-63bc-40b0-80ba-a7108a7b2852"
+        }
+      },
+      {
+        "id": "evt_21aa04ca-5b7e-4cd2-ae8d-5ff002284923",
+        "timestamp": "2026-10-26T21:07:15.103Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P6 defeated P14",
+        "entityIds": {
+          "matchId": "m_14e7a12a-8495-4ab7-903e-0fccc207201e",
+          "roundId": "rnd_c81e5663-63bc-40b0-80ba-a7108a7b2852"
+        }
+      },
+      {
+        "id": "evt_6975ebf9-1585-41d7-829b-c749d6fc6795",
+        "timestamp": "2026-10-26T21:07:15.103Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P15 defeated P2",
+        "entityIds": {
+          "matchId": "m_cbceab77-bbe2-4a69-b921-7c25494a7d43",
+          "roundId": "rnd_c81e5663-63bc-40b0-80ba-a7108a7b2852"
+        }
+      },
+      {
+        "id": "evt_84496773-4fab-4656-920e-81b8e76c3e61",
+        "timestamp": "2026-10-26T21:07:15.103Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P4 defeated P8",
+        "entityIds": {
+          "matchId": "m_765a1f20-d098-4852-b55e-20cc7d63038f",
+          "roundId": "rnd_c81e5663-63bc-40b0-80ba-a7108a7b2852"
+        }
+      },
+      {
+        "id": "evt_aa5aadbd-9e9c-4efe-8c9c-9e0206d9d7f9",
+        "timestamp": "2026-10-26T21:07:15.103Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P10 defeated P12",
+        "entityIds": {
+          "matchId": "m_137d6bc4-cc72-4e61-a523-db73b5082e99",
+          "roundId": "rnd_c81e5663-63bc-40b0-80ba-a7108a7b2852"
+        }
+      },
+      {
+        "id": "evt_462a53b4-0eab-4568-86fb-a6662f963b8e",
+        "timestamp": "2026-10-26T21:07:15.104Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P13 defeated P9",
+        "entityIds": {
+          "matchId": "m_41a1c20e-2caa-4747-b20f-0ad651f0f738",
+          "roundId": "rnd_c81e5663-63bc-40b0-80ba-a7108a7b2852"
+        }
+      },
+      {
+        "id": "evt_221537ee-d072-4ab8-b9e6-49e91ca3569c",
+        "timestamp": "2026-10-26T21:07:15.104Z",
+        "type": "ROUND_COMPLETED",
+        "description": "Round 3 completed",
+        "entityIds": {
+          "roundId": "rnd_c81e5663-63bc-40b0-80ba-a7108a7b2852"
+        }
+      },
+      {
+        "id": "evt_d81022b1-a4c6-4426-a9dc-6f49dac01286",
+        "timestamp": "2026-10-26T21:07:15.104Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P9 receives a bye",
+        "entityIds": {
+          "matchId": "m_6d997623-7e6e-4cc5-b23d-8760b8e197c0",
+          "roundId": "rnd_b3cc9814-4570-46aa-9df3-3ea8f51f53c2",
+          "playerId": "p_a58b94e8-3965-430a-9dfd-0f9d36090647"
+        }
+      },
+      {
+        "id": "evt_968c8e52-b91b-4c9e-a263-943a6324b95f",
+        "timestamp": "2026-10-26T21:07:15.104Z",
+        "type": "ROUND_CREATED",
+        "description": "Round 4 generated (7 matches, bye: P9)",
+        "entityIds": {
+          "roundId": "rnd_b3cc9814-4570-46aa-9df3-3ea8f51f53c2"
+        }
+      },
+      {
+        "id": "evt_1061339e-a8ad-4985-aa82-c8d6bf1593b1",
+        "timestamp": "2026-10-26T21:07:15.104Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P6 defeated P1",
+        "entityIds": {
+          "matchId": "m_fb7b5551-40da-428d-985f-c8f75c0de2db",
+          "roundId": "rnd_b3cc9814-4570-46aa-9df3-3ea8f51f53c2"
+        }
+      },
+      {
+        "id": "evt_89e2c72b-2051-4472-9e46-b03f5693abdd",
+        "timestamp": "2026-10-26T21:07:15.104Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P3 defeated P15",
+        "entityIds": {
+          "matchId": "m_cd7fda04-2246-4e0b-b91e-fbb514f83280",
+          "roundId": "rnd_b3cc9814-4570-46aa-9df3-3ea8f51f53c2"
+        }
+      },
+      {
+        "id": "evt_43629db7-e0fa-49f0-8d8d-41afa2238be7",
+        "timestamp": "2026-10-26T21:07:15.105Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P4 defeated P10",
+        "entityIds": {
+          "matchId": "m_77a89468-5f47-407a-9701-0330b382b36f",
+          "roundId": "rnd_b3cc9814-4570-46aa-9df3-3ea8f51f53c2"
+        }
+      },
+      {
+        "id": "evt_631345c5-54e0-4c9d-bdfe-f7bd3b4942cf",
+        "timestamp": "2026-10-26T21:07:15.105Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P14 defeated P2",
+        "entityIds": {
+          "matchId": "m_e8a3d50c-e2ca-4829-883c-6c25c3569d7c",
+          "roundId": "rnd_b3cc9814-4570-46aa-9df3-3ea8f51f53c2"
+        }
+      },
+      {
+        "id": "evt_4976ef6f-2ab2-4c5b-9afc-c7a44f2c28a1",
+        "timestamp": "2026-10-26T21:07:15.105Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P11 defeated P12",
+        "entityIds": {
+          "matchId": "m_aacf39ee-e937-43b0-a9c3-1533eac3c4fd",
+          "roundId": "rnd_b3cc9814-4570-46aa-9df3-3ea8f51f53c2"
+        }
+      },
+      {
+        "id": "evt_f53bb191-fb14-453a-8423-c8b2ed18848c",
+        "timestamp": "2026-10-26T21:07:15.105Z",
+        "type": "MATCH_RESULT_RECORDED",
+        "description": "P8 defeated P13",
+        "entityIds": {
+          "matchId": "m_a5fd4866-08ea-4ee1-b263-130a00e5e28f",
+          "roundId": "rnd_b3cc9814-4570-46aa-9df3-3ea8f51f53c2"
+        }
+      },
+      {
+        "id": "evt_d1af330e-3bf9-445b-8788-6a54548763e6",
+        "timestamp": "2026-10-26T21:07:15.105Z",
+        "type": "TOURNAMENT_COMPLETED",
+        "description": "P6 finishes first in the standings",
+        "entityIds": {
+          "playerId": "p_bf5c1d2a-59e2-4120-93eb-e41818f9c540"
+        }
+      },
+      {
+        "id": "evt_2a76227a-ff28-4c67-a013-9f4a9a8259da",
+        "timestamp": "2026-10-26T21:07:15.105Z",
+        "type": "ROUND_COMPLETED",
+        "description": "Round 4 completed",
+        "entityIds": {
+          "roundId": "rnd_b3cc9814-4570-46aa-9df3-3ea8f51f53c2"
+        }
+      }
+    ],
+    "settings": {
+      "seedingMode": "REGISTRATION_ORDER",
+      "randomSeed": 42,
+      "plannedRounds": 4,
+      "scoring": {
+        "win": 3,
+        "draw": 1,
+        "loss": 0,
+        "bye": 3
+      }
+    },
+    "createdAt": "2026-10-26T21:07:15.100Z",
+    "updatedAt": "2026-10-26T21:07:15.105Z",
+    "schemaVersion": 1,
+    "championId": "p_bf5c1d2a-59e2-4120-93eb-e41818f9c540"
+  }
+}

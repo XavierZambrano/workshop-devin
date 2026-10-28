@@ -1,0 +1,15 @@
+{
+  "name": "tourney-brackets-and-leagues",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @tourney/master-web",
+    "build": "npm run build --workspace @tourney/master-web",
+    "test": "npm run test --workspace @tourney/engine",
+    "typecheck": "npm run typecheck --workspace @tourney/engine && npm run typecheck --workspace @tourney/master-web"
+  }
+}
