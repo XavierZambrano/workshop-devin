@@ -60,8 +60,9 @@ export function StandingsView({ t }: { t: Tournament }) {
         </table>
       </div>
       <p className="mt-3 text-sm text-slate-500">
-        Tiebreakers: match points → opponent match-win % → head-to-head → seed. Win% and Opp%
-        exclude byes.
+        {t.format === 'ROUND_ROBIN'
+          ? 'Tiebreakers: points → head-to-head → Opp% → seed. Opp% stands in for game win% because the model has no game scores.'
+          : 'Tiebreakers: match points → opponent match-win % → head-to-head → seed. Win% and Opp% exclude byes.'}
       </p>
     </div>
   );

@@ -7,6 +7,7 @@ import { BracketView } from './views/BracketView';
 import { PlayersView } from './views/PlayersView';
 import { HistoryView } from './views/HistoryView';
 import { ConfirmDialog } from './components/Modal';
+import { TournamentPicker } from './components/TournamentPicker';
 
 const NAV: Array<{ key: View; label: string }> = [
   { key: 'tournament', label: 'Tournament' },
@@ -69,6 +70,7 @@ export default function App() {
             )}
           </div>
           <div className="ml-auto flex items-center gap-2">
+            <TournamentPicker />
             <button
               onClick={exportJson}
               disabled={!tournament}

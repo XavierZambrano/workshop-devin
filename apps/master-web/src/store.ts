@@ -4,10 +4,18 @@ import {
   createTournament,
   deserializeTournament,
   serializeTournament,
+  updateTournamentSettings,
   DomainError,
   type CreateTournamentInput,
 } from '@tourney/engine';
-import { loadActiveTournament, persistTournament } from './db';
+import {
+  db,
+  deleteTournament as deleteStoredTournament,
+  listTournaments,
+  loadActiveTournament,
+  persistTournament,
+  setActiveTournamentId,
+} from './db';
 
 export type View = 'tournament' | 'round' | 'standings' | 'bracket' | 'players' | 'history';
 
@@ -34,6 +42,9 @@ interface AppState {
   exportJson(): void;
   /** Start over: keep the old tournament in IndexedDB but make a fresh draft. */
   newTournament(): void;
+  openTournament(id: string): Promise<void>;
+  renameTournament(id: string, name: string): Promise<void>;
+  deleteTournament(id: string): Promise<void>;
 }
 
 function slug(s: string): string {
@@ -132,5 +143,70 @@ export const useApp = create<AppState>()((set, get) => ({
     const t = createTournament({ name: '', format: 'SINGLE_ELIMINATION' });
     set({ tournament: t, view: 'tournament', selectedPlayerId: null, notice: null });
     void persistTournament(t);
+  },
+
+  async openTournament(id) {
+    try {
+      const row = await db.tournaments.get(id);
+      if (!row) {
+        set({ notice: { kind: 'error', text: 'Tournament not found' } });
+        return;
+      }
+      await setActiveTournamentId(id);
+      set({
+        tournament: row.data,
+        view: row.data.status === 'DRAFT' ? 'tournament' : 'round',
+        selectedPlayerId: null,
+        notice: null,
+      });
+    } catch (e) {
+      set({ notice: { kind: 'error', text: `Could not open tournament: ${String(e)}` } });
+    }
+  },
+
+  async renameTournament(id, name) {
+    const normalizedName = name.trim();
+    if (!normalizedName) {
+      set({ notice: { kind: 'error', text: 'Tournament name is required' } });
+      return;
+    }
+    const current = get().tournament;
+    if (current?.id === id && current.status === 'DRAFT') {
+      get().mutate((t) => updateTournamentSettings(t, { name: normalizedName }));
+      const renamed = get().tournament;
+      if (renamed) await persistTournament(renamed);
+      return;
+    }
+    try {
+      const row = await db.tournaments.get(id);
+      if (!row) {
+        set({ notice: { kind: 'error', text: 'Tournament not found' } });
+        return;
+      }
+      const updatedAt = new Date().toISOString();
+      const data = { ...row.data, name: normalizedName, updatedAt };
+      await db.tournaments.put({ id, updatedAt, data });
+      if (get().tournament?.id === id) set({ tournament: data, notice: null });
+    } catch (e) {
+      set({ notice: { kind: 'error', text: `Could not rename tournament: ${String(e)}` } });
+    }
+  },
+
+  async deleteTournament(id) {
+    const wasActive = get().tournament?.id === id;
+    try {
+      await deleteStoredTournament(id);
+      if (!wasActive || get().tournament?.id !== id) return;
+      const remaining = await listTournaments();
+      if (remaining[0]) {
+        await get().openTournament(remaining[0].id);
+      } else {
+        get().newTournament();
+        const fresh = get().tournament;
+        if (fresh) await persistTournament(fresh);
+      }
+    } catch (e) {
+      set({ notice: { kind: 'error', text: `Could not delete tournament: ${String(e)}` } });
+    }
   },
 }));
