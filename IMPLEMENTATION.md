@@ -45,15 +45,16 @@ A working PoC covering both spec acceptance scenarios end-to-end:
 
 ## Deviations from the spec
 
-- Single-elimination results must identify a winner; draws and double losses
-  are rejected. Automatic byes and walkovers advance the remaining player
-  regardless of bracket side.
+- `matchWinPct`/`Opp%` exclude byes from the *denominator* (MTG convention):
+  a bye grants points but is not a "played" match. Documented in README.
 - `PENALTY.DISQUALIFICATION` records the sanction; actual removal requires the
   explicit **Disqualify** action — the UI says so in the penalty dialog. This
   keeps "the resulting state change explicit and auditable" per spec.
-- SE draws/double-losses produce no winner; the downstream slot resolves as an
-  automatic bye (or voids if no players can reach it) so the bracket can never
-  wedge.
+- SE results must identify a winner: draws and double losses are rejected by
+  the engine and hidden in the UI. When a drop/DQ leaves a match with a single
+  player, that player advances by automatic bye or walkover regardless of which
+  bracket side they occupy (a bye-on-side-B previously left the bracket stuck
+  without a champion).
 - Corrections are permitted on completed tournaments (the SE final case):
   the champion is retracted and the dependent chain voided for re-entry.
 - Only one "active" tournament is surfaced; older ones stay in IndexedDB but
