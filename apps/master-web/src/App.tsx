@@ -7,6 +7,7 @@ import { BracketView } from './views/BracketView';
 import { PlayersView } from './views/PlayersView';
 import { HistoryView } from './views/HistoryView';
 import { ConfirmDialog } from './components/Modal';
+import { createMediaPublisher } from './media/publisher';
 
 const NAV: Array<{ key: View; label: string }> = [
   { key: 'tournament', label: 'Tournament' },
@@ -32,6 +33,21 @@ export default function App() {
     const id = setTimeout(dismissNotice, 6000);
     return () => clearTimeout(id);
   }, [notice, dismissNotice]);
+
+  useEffect(() => {
+    const publisher = createMediaPublisher();
+    let currentTournament = useApp.getState().tournament;
+    publisher.publish(currentTournament);
+    const unsubscribe = useApp.subscribe((state) => {
+      if (state.tournament === currentTournament) return;
+      currentTournament = state.tournament;
+      publisher.publish(currentTournament);
+    });
+    return () => {
+      unsubscribe();
+      publisher.dispose();
+    };
+  }, []);
 
   if (!hydrated) {
     return (
@@ -69,6 +85,12 @@ export default function App() {
             )}
           </div>
           <div className="ml-auto flex items-center gap-2">
+            <button
+              onClick={() => window.open('?view=media', 'tourney-media')}
+              className="rounded-lg border border-slate-600 px-3 py-1.5 text-sm hover:bg-slate-800"
+            >
+              Open media window
+            </button>
             <button
               onClick={exportJson}
               disabled={!tournament}
