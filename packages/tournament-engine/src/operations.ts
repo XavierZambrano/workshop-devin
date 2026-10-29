@@ -105,6 +105,10 @@ export function addPlayer(t: Tournament, displayName: string): Tournament {
   return d;
 }
 
+export function normalizePlayerName(displayName: string): string {
+  return displayName.trim().normalize('NFC').toLowerCase();
+}
+
 export function importPlayers(
   t: Tournament,
   rows: Array<{ displayName: string; seed?: number; photoRef?: string }>,
@@ -116,21 +120,21 @@ export function importPlayers(
   }
 
   const seenNames = new Set(
-    t.players.map((player) => player.displayName.trim().normalize('NFC').toLowerCase()),
+    t.players.map((player) => normalizePlayerName(player.displayName)),
   );
   const normalizedRows = rows.map((row, index) => {
     const displayName =
       typeof row.displayName === 'string' ? row.displayName.trim().normalize('NFC') : '';
-    const nameKey = displayName.toLowerCase();
+    const nameKey = normalizePlayerName(displayName);
     if (!displayName) {
-      problems.push(`Row ${index + 1}: Player name is required`);
+      problems.push(`Import row ${index + 1}: Player name is required`);
     } else if (seenNames.has(nameKey)) {
-      problems.push(`Row ${index + 1}: Duplicate player name '${displayName}'`);
+      problems.push(`Import row ${index + 1}: Duplicate player name '${displayName}'`);
     } else {
       seenNames.add(nameKey);
     }
     if (row.seed !== undefined && (!Number.isInteger(row.seed) || row.seed <= 0)) {
-      problems.push(`Row ${index + 1}: Seed must be a positive integer`);
+      problems.push(`Import row ${index + 1}: Seed must be a positive integer`);
     }
     return { ...row, displayName };
   });

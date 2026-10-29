@@ -3,6 +3,7 @@ import {
   addPlayer,
   importPlayers,
   MAX_PLAYERS,
+  normalizePlayerName,
   parsePlayersCsv,
   removePlayer,
   recommendedSwissRounds,
@@ -75,6 +76,24 @@ function DraftSetup({ t }: { t: Tournament }) {
   const csvInput = useRef<HTMLInputElement>(null);
   const [csvPreview, setCsvPreview] = useState<ParsedPlayersCsv | null>(null);
   const [csvReadError, setCsvReadError] = useState<string | null>(null);
+  const existingPlayerNames = new Set(
+    t.players.map((player) => normalizePlayerName(player.displayName)),
+  );
+  const isExistingPlayer = (displayName: string) =>
+    existingPlayerNames.has(normalizePlayerName(displayName));
+  const importableCsvRows =
+    csvPreview?.rows.filter((row) => !isExistingPlayer(row.displayName)) ?? [];
+  const existingPlayerErrors =
+    csvPreview?.rows
+      .filter((row) => isExistingPlayer(row.displayName))
+      .map((row) => ({
+        line: row.line,
+        message: `"${row.displayName}" is already registered`,
+      })) ?? [];
+  const csvPreviewErrors = [...(csvPreview?.errors ?? []), ...existingPlayerErrors].sort(
+    (a, b) => a.line - b.line,
+  );
+  const csvPlayerTotal = t.players.length + importableCsvRows.length;
 
   const add = () => {
     if (!name.trim()) return;
@@ -126,7 +145,7 @@ function DraftSetup({ t }: { t: Tournament }) {
     mutate((d) =>
       importPlayers(
         d,
-        csvPreview.rows.map(({ displayName, seed, photoRef }) => ({
+        importableCsvRows.map(({ displayName, seed, photoRef }) => ({
           displayName,
           ...(seed === undefined ? {} : { seed }),
           ...(photoRef === undefined ? {} : { photoRef }),
@@ -346,6 +365,12 @@ function DraftSetup({ t }: { t: Tournament }) {
               {csvPreview.hasHeader ? 'Header detected.' : 'No header detected.'}
             </p>
             {csvReadError && <p className="text-red-300">{csvReadError}</p>}
+            {csvPlayerTotal > MAX_PLAYERS && (
+              <p className="text-red-300">
+                Too many players: {t.players.length} existing + {importableCsvRows.length} imported
+                = {csvPlayerTotal} (max {MAX_PLAYERS})
+              </p>
+            )}
             {csvPreview.rows.some((row) => row.seed !== undefined) &&
               t.settings.seedingMode !== 'MANUAL' && (
                 <p className="text-amber-300">
@@ -353,10 +378,10 @@ function DraftSetup({ t }: { t: Tournament }) {
                 </p>
               )}
             <section>
-              <h3 className="mb-2 font-semibold">Valid players ({csvPreview.rows.length})</h3>
-              {csvPreview.rows.length > 0 ? (
+              <h3 className="mb-2 font-semibold">Valid players ({importableCsvRows.length})</h3>
+              {importableCsvRows.length > 0 ? (
                 <ul className="max-h-40 space-y-1 overflow-y-auto rounded border border-slate-700 p-2">
-                  {csvPreview.rows.map((row) => (
+                  {importableCsvRows.map((row) => (
                     <li key={`${row.line}-${row.displayName}`} className="flex justify-between gap-3">
                       <span className="truncate">
                         Line {row.line}: {row.displayName}
@@ -372,10 +397,10 @@ function DraftSetup({ t }: { t: Tournament }) {
               )}
             </section>
             <section>
-              <h3 className="mb-2 font-semibold">Errors ({csvPreview.errors.length})</h3>
-              {csvPreview.errors.length > 0 ? (
+              <h3 className="mb-2 font-semibold">Errors ({csvPreviewErrors.length})</h3>
+              {csvPreviewErrors.length > 0 ? (
                 <ul className="max-h-32 space-y-1 overflow-y-auto rounded border border-red-900/70 p-2 text-red-300">
-                  {csvPreview.errors.map((error, index) => (
+                  {csvPreviewErrors.map((error, index) => (
                     <li key={`${error.line}-${index}`}>
                       Line {error.line}: {error.message}
                     </li>
@@ -396,9 +421,9 @@ function DraftSetup({ t }: { t: Tournament }) {
                 onClick={importCsvPlayers}
                 disabled={
                   !!csvReadError ||
-                  csvPreview.errors.length > 0 ||
-                  csvPreview.rows.length === 0 ||
-                  t.players.length + csvPreview.rows.length > MAX_PLAYERS
+                  csvPreviewErrors.length > 0 ||
+                  importableCsvRows.length === 0 ||
+                  csvPlayerTotal > MAX_PLAYERS
                 }
                 className="rounded-lg bg-emerald-700 px-4 py-2 font-semibold hover:bg-emerald-600 disabled:opacity-40"
               >

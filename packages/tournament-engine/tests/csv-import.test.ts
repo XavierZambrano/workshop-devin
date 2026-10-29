@@ -7,6 +7,7 @@ import {
   ErrorCodes,
   importPlayers,
   MAX_PLAYERS,
+  normalizePlayerName,
   serializeTournament,
   startTournament,
 } from '../src';
@@ -109,11 +110,12 @@ describe('parsePlayersCsv', () => {
 describe('importPlayers', () => {
   it('validates atomically and leaves the tournament unchanged when one row is invalid', () => {
     let t = addPlayer(draft(), 'Existing');
-    const before = serializeTournament(t);
+    const before = structuredClone(t);
     const error = importError(t, [{ displayName: 'New player' }, { displayName: '  ' }]);
 
     expect(error.message).toMatch(/name/i);
-    expect(serializeTournament(t)).toBe(before);
+    expect(error.message).toContain('Import row 2: Player name is required');
+    expect(t).toEqual(before);
   });
 
   it('appends imported players and preserves optional photo references', () => {
@@ -135,6 +137,10 @@ describe('importPlayers', () => {
     const t = addPlayer(draft(), 'José');
 
     expect(importError(t, [{ displayName: 'josé' }]).message).toMatch(/duplicate/i);
+    expect(normalizePlayerName(' José ')).toBe(normalizePlayerName('jose\u0301'));
+    expect(importError(t, [{ displayName: ' jose\u0301 ' }]).message).toContain(
+      "Import row 1: Duplicate player name 'josé'",
+    );
     expect(
       importError(t, [{ displayName: 'Müller' }, { displayName: 'mÜLLER' }]).message,
     ).toMatch(/duplicate/i);

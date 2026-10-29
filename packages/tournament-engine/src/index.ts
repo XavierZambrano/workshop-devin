@@ -24,6 +24,7 @@ export {
   updateTournamentSettings,
   addPlayer,
   importPlayers,
+  normalizePlayerName,
   updatePlayer,
   removePlayer,
   reorderPlayers,
