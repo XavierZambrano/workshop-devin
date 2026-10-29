@@ -129,31 +129,39 @@ export function MatchCard({ t, m }: { t: Tournament; m: Match }) {
       </div>
 
       {(playable || (correctable && correcting)) && (
-        <div className="mt-3 grid grid-cols-4 gap-2">
+        <div
+          className={`mt-3 grid gap-2 ${
+            t.format === 'SINGLE_ELIMINATION' ? 'grid-cols-2' : 'grid-cols-4'
+          }`}
+        >
           <button
             onClick={() => submit('PLAYER_A_WIN')}
             className="min-h-12 rounded-lg bg-emerald-700 px-3 py-3 text-base font-semibold hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-400"
           >
             {playerOf(t, m.playerAId)?.displayName ?? 'A'} wins
           </button>
-          <button
-            onClick={() => submit('DRAW')}
-            className="min-h-12 rounded-lg bg-slate-700 px-3 py-3 text-base font-semibold hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-400"
-          >
-            Draw
-          </button>
+          {t.format !== 'SINGLE_ELIMINATION' && (
+            <button
+              onClick={() => submit('DRAW')}
+              className="min-h-12 rounded-lg bg-slate-700 px-3 py-3 text-base font-semibold hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-400"
+            >
+              Draw
+            </button>
+          )}
           <button
             onClick={() => submit('PLAYER_B_WIN')}
             className="min-h-12 rounded-lg bg-emerald-700 px-3 py-3 text-base font-semibold hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-400"
           >
             {playerOf(t, m.playerBId)?.displayName ?? 'B'} wins
           </button>
-          <button
-            onClick={() => submit('DOUBLE_LOSS')}
-            className="min-h-12 rounded-lg border border-red-800 bg-red-950/40 px-2 py-3 text-sm font-medium text-red-300 hover:bg-red-900/40 focus:outline-none focus:ring-2 focus:ring-red-400"
-          >
-            Double loss
-          </button>
+          {t.format !== 'SINGLE_ELIMINATION' && (
+            <button
+              onClick={() => submit('DOUBLE_LOSS')}
+              className="min-h-12 rounded-lg border border-red-800 bg-red-950/40 px-2 py-3 text-sm font-medium text-red-300 hover:bg-red-900/40 focus:outline-none focus:ring-2 focus:ring-red-400"
+            >
+              Double loss
+            </button>
+          )}
         </div>
       )}
 

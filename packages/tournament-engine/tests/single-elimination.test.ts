@@ -8,6 +8,20 @@ function byeCount(t: ReturnType<typeof startedTournament>) {
   return t.matches.filter((m) => m.result === 'BYE').length;
 }
 
+function expectResultNotAllowed(action: () => unknown) {
+  let error: unknown;
+  try {
+    action();
+  } catch (caught) {
+    error = caught;
+  }
+  expect(error).toBeInstanceOf(DomainError);
+  expect(error).toMatchObject({
+    code: 'RESULT_NOT_ALLOWED_FOR_FORMAT',
+    message: 'Single elimination needs a winner: draws and double losses are not allowed',
+  });
+}
+
 describe('single elimination bracket sizes', () => {
   it.each([
     [2, 2, 0],
@@ -57,6 +71,59 @@ describe('seedSlotOrder', () => {
 });
 
 describe('single elimination progression', () => {
+  it.each([
+    ['PLAYER_A_WIN', 'P2'],
+    ['PLAYER_B_WIN', 'P3'],
+  ] as const)('completes a three-player bracket after seed 1 is disqualified (%s)', (result, winnerName) => {
+    let t = startedTournament('SINGLE_ELIMINATION', names(3));
+    const seedOne = playerByName(t, 'P1')!;
+    t = disqualifyPlayer(t, seedOne.id, 'disqualified');
+
+    const match = playable(t)[0]!;
+    const winnerId = result === 'PLAYER_A_WIN' ? match.playerAId : match.playerBId;
+    t = recordResult(t, match.id, result);
+
+    expect(t.status).toBe('COMPLETE');
+    expect(t.championId).toBe(playerByName(t, winnerName)?.id);
+    expect(t.championId).toBe(winnerId);
+  });
+
+  it('completes when a dropped player leaves only a side-B finalist', () => {
+    let t = startedTournament('SINGLE_ELIMINATION', names(4));
+    const playerOne = playerByName(t, 'P1')!;
+    const firstMatch = playable(t).find(
+      (m) => m.playerAId === playerOne.id || m.playerBId === playerOne.id,
+    )!;
+    const firstResult = firstMatch.playerAId === playerOne.id ? 'PLAYER_A_WIN' : 'PLAYER_B_WIN';
+    t = recordResult(t, firstMatch.id, firstResult);
+
+    const otherMatch = playable(t).find((m) => m.id !== firstMatch.id)!;
+    const survivorId = otherMatch.playerBId!;
+    t = dropPlayer(t, playerOne.id, 'left early');
+    t = recordResult(t, otherMatch.id, 'PLAYER_B_WIN');
+
+    const final = t.matches.find((m) => m.roundNumber === 2)!;
+    expect(final.playerAId).toBeUndefined();
+    expect(final.playerBId).toBe(survivorId);
+    expect(final.result).toBe('BYE');
+    expect(t.status).toBe('COMPLETE');
+    expect(t.championId).toBe(survivorId);
+  });
+
+  it('rejects draws and double losses for recorded and corrected results', () => {
+    let t = startedTournament('SINGLE_ELIMINATION', names(4));
+    const match = playable(t)[0]!;
+
+    for (const result of ['DRAW', 'DOUBLE_LOSS'] as const) {
+      expectResultNotAllowed(() => recordResult(t, match.id, result));
+    }
+
+    t = recordResult(t, match.id, 'PLAYER_A_WIN');
+    for (const result of ['DRAW', 'DOUBLE_LOSS'] as const) {
+      expectResultNotAllowed(() => correctResult(t, match.id, result));
+    }
+  });
+
   it('advances winners and produces a champion (4 players)', () => {
     let t = startedTournament('SINGLE_ELIMINATION', names(4));
     expect(t.rounds.length).toBe(2);
