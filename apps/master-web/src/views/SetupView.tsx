@@ -1,22 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import {
   addPlayer,
+  importPlayers,
   MAX_PLAYERS,
+  normalizePlayerName,
+  parsePlayersCsv,
   removePlayer,
+  recommendedSwissRounds,
   reorderPlayers,
   randomizeSeeds,
   startTournament,
   updatePlayer,
   updateTournamentSettings,
   type Player,
+  type ParsedPlayersCsv,
   type SeedingMode,
   type Tournament,
   type TournamentFormat,
 } from '@tourney/engine';
-import { recommendedSwissRounds } from '@tourney/engine';
 import { useApp } from '../store';
 import { recordString, statusBadge } from '../helpers';
-import { ConfirmDialog } from '../components/Modal';
+import { ConfirmDialog, Modal } from '../components/Modal';
 
 function recommendedRounds(t: Tournament): number {
   return recommendedSwissRounds(t.players.length);
@@ -69,6 +73,27 @@ function DraftSetup({ t }: { t: Tournament }) {
   const mutate = useApp((s) => s.mutate);
   const setView = useApp((s) => s.setView);
   const [name, setName] = useState('');
+  const csvInput = useRef<HTMLInputElement>(null);
+  const [csvPreview, setCsvPreview] = useState<ParsedPlayersCsv | null>(null);
+  const [csvReadError, setCsvReadError] = useState<string | null>(null);
+  const existingPlayerNames = new Set(
+    t.players.map((player) => normalizePlayerName(player.displayName)),
+  );
+  const isExistingPlayer = (displayName: string) =>
+    existingPlayerNames.has(normalizePlayerName(displayName));
+  const importableCsvRows =
+    csvPreview?.rows.filter((row) => !isExistingPlayer(row.displayName)) ?? [];
+  const existingPlayerErrors =
+    csvPreview?.rows
+      .filter((row) => isExistingPlayer(row.displayName))
+      .map((row) => ({
+        line: row.line,
+        message: `"${row.displayName}" is already registered`,
+      })) ?? [];
+  const csvPreviewErrors = [...(csvPreview?.errors ?? []), ...existingPlayerErrors].sort(
+    (a, b) => a.line - b.line,
+  );
+  const csvPlayerTotal = t.players.length + importableCsvRows.length;
 
   const add = () => {
     if (!name.trim()) return;
@@ -87,6 +112,48 @@ function DraftSetup({ t }: { t: Tournament }) {
 
   const planned = t.settings.plannedRounds ?? recommendedRounds(t);
   const [starting, setStarting] = useState(false);
+
+  const closeCsvPreview = () => {
+    setCsvPreview(null);
+    setCsvReadError(null);
+  };
+
+  const readCsv = async (event: ChangeEvent<HTMLInputElement>) => {
+    const input = event.currentTarget;
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file) return;
+
+    try {
+      const buffer = await file.arrayBuffer();
+      let text: string;
+      try {
+        text = new TextDecoder('utf-8', { fatal: true }).decode(buffer);
+      } catch {
+        text = new TextDecoder('windows-1252').decode(buffer);
+      }
+      setCsvReadError(null);
+      setCsvPreview(parsePlayersCsv(text));
+    } catch (error) {
+      setCsvReadError(error instanceof Error ? error.message : 'Could not read CSV file');
+      setCsvPreview({ rows: [], errors: [], separator: ',', hasHeader: false });
+    }
+  };
+
+  const importCsvPlayers = () => {
+    if (!csvPreview) return;
+    mutate((d) =>
+      importPlayers(
+        d,
+        importableCsvRows.map(({ displayName, seed, photoRef }) => ({
+          displayName,
+          ...(seed === undefined ? {} : { seed }),
+          ...(photoRef === undefined ? {} : { photoRef }),
+        })),
+      ),
+    );
+    closeCsvPreview();
+  };
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
@@ -200,6 +267,20 @@ function DraftSetup({ t }: { t: Tournament }) {
           >
             Add
           </button>
+          <button
+            type="button"
+            onClick={() => csvInput.current?.click()}
+            className="rounded-lg border border-slate-600 px-4 py-2 font-semibold hover:bg-slate-800"
+          >
+            Import CSV
+          </button>
+          <input
+            ref={csvInput}
+            type="file"
+            accept=".csv,text/csv"
+            className="hidden"
+            onChange={readCsv}
+          />
         </div>
 
         <ul className="divide-y divide-slate-800">
@@ -273,6 +354,84 @@ function DraftSetup({ t }: { t: Tournament }) {
           }}
           onCancel={() => setStarting(false)}
         />
+      )}
+
+      {csvPreview && (
+        <Modal title="Import players from CSV" onClose={closeCsvPreview}>
+          <div className="space-y-4 text-sm">
+            <p className="text-slate-300">
+              Detected separator:{' '}
+              {csvPreview.separator === '\t' ? 'tab' : `"${csvPreview.separator}"`}.{' '}
+              {csvPreview.hasHeader ? 'Header detected.' : 'No header detected.'}
+            </p>
+            {csvReadError && <p className="text-red-300">{csvReadError}</p>}
+            {csvPlayerTotal > MAX_PLAYERS && (
+              <p className="text-red-300">
+                Too many players: {t.players.length} existing + {importableCsvRows.length} imported
+                = {csvPlayerTotal} (max {MAX_PLAYERS})
+              </p>
+            )}
+            {csvPreview.rows.some((row) => row.seed !== undefined) &&
+              t.settings.seedingMode !== 'MANUAL' && (
+                <p className="text-amber-300">
+                  Seeds are present, but seeding is not Manual; seeds will be ignored.
+                </p>
+              )}
+            <section>
+              <h3 className="mb-2 font-semibold">Valid players ({importableCsvRows.length})</h3>
+              {importableCsvRows.length > 0 ? (
+                <ul className="max-h-40 space-y-1 overflow-y-auto rounded border border-slate-700 p-2">
+                  {importableCsvRows.map((row) => (
+                    <li key={`${row.line}-${row.displayName}`} className="flex justify-between gap-3">
+                      <span className="truncate">
+                        Line {row.line}: {row.displayName}
+                      </span>
+                      {row.seed !== undefined && (
+                        <span className="shrink-0 text-slate-400">Seed {row.seed}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-slate-500">No valid players.</p>
+              )}
+            </section>
+            <section>
+              <h3 className="mb-2 font-semibold">Errors ({csvPreviewErrors.length})</h3>
+              {csvPreviewErrors.length > 0 ? (
+                <ul className="max-h-32 space-y-1 overflow-y-auto rounded border border-red-900/70 p-2 text-red-300">
+                  {csvPreviewErrors.map((error, index) => (
+                    <li key={`${error.line}-${index}`}>
+                      Line {error.line}: {error.message}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-slate-500">No row errors.</p>
+              )}
+            </section>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={closeCsvPreview}
+                className="rounded-lg border border-slate-600 px-4 py-2 hover:bg-slate-800"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={importCsvPlayers}
+                disabled={
+                  !!csvReadError ||
+                  csvPreviewErrors.length > 0 ||
+                  importableCsvRows.length === 0 ||
+                  csvPlayerTotal > MAX_PLAYERS
+                }
+                className="rounded-lg bg-emerald-700 px-4 py-2 font-semibold hover:bg-emerald-600 disabled:opacity-40"
+              >
+                Import
+              </button>
+            </div>
+          </div>
+        </Modal>
       )}
     </div>
   );

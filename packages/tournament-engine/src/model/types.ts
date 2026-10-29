@@ -37,6 +37,7 @@ export interface Player {
   displayName: string;
   /** 1-based seed assigned at tournament start (or manually during setup). */
   seed?: number;
+  photoRef?: string;
   status: PlayerStatus;
   createdAt: string;
   /** Reason recorded when the player was dropped or disqualified. */

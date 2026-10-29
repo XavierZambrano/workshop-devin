@@ -6,6 +6,7 @@
 import type {
   MatchResult,
   PenaltyType,
+  Player,
   Tournament,
   TournamentEvent,
   TournamentFormat,
@@ -102,6 +103,86 @@ export function addPlayer(t: Tournament, displayName: string): Tournament {
     makeEvent('PLAYER_REGISTERED', `${name} registered`, { playerId: player.id }),
   );
   return d;
+}
+
+export function normalizePlayerName(displayName: string): string {
+  return displayName.trim().normalize('NFC').toLowerCase();
+}
+
+export function importPlayers(
+  t: Tournament,
+  rows: Array<{ displayName: string; seed?: number; photoRef?: string }>,
+): Tournament {
+  requireDraft(t);
+  const problems: string[] = [];
+  if (t.players.length + rows.length > MAX_PLAYERS) {
+    problems.push(`Maximum of ${MAX_PLAYERS} players, including existing registrations`);
+  }
+
+  const seenNames = new Set(
+    t.players.map((player) => normalizePlayerName(player.displayName)),
+  );
+  const normalizedRows = rows.map((row, index) => {
+    const displayName =
+      typeof row.displayName === 'string' ? row.displayName.trim().normalize('NFC') : '';
+    const nameKey = normalizePlayerName(displayName);
+    if (!displayName) {
+      problems.push(`Import row ${index + 1}: Player name is required`);
+    } else if (seenNames.has(nameKey)) {
+      problems.push(`Import row ${index + 1}: Duplicate player name '${displayName}'`);
+    } else {
+      seenNames.add(nameKey);
+    }
+    if (row.seed !== undefined && (!Number.isInteger(row.seed) || row.seed <= 0)) {
+      problems.push(`Import row ${index + 1}: Seed must be a positive integer`);
+    }
+    return { ...row, displayName };
+  });
+
+  if (problems.length > 0) {
+    throw new DomainError(ErrorCodes.IMPORT_INVALID, `Player import failed:\n${problems.join('\n')}`);
+  }
+
+  let result = t;
+  for (const row of normalizedRows) {
+    result = addPlayer(result, row.displayName);
+    const player = result.players[result.players.length - 1]!;
+    if (row.photoRef !== undefined) player.photoRef = row.photoRef;
+    if (result.settings.seedingMode === 'MANUAL' && row.seed !== undefined) {
+      player.seed = row.seed;
+    }
+  }
+
+  if (
+    result.settings.seedingMode === 'MANUAL' &&
+    normalizedRows.some((row) => row.seed !== undefined)
+  ) {
+    const positions = new Array<Player | undefined>(result.players.length);
+    const seeded = result.players
+      .map((player, index) => ({ player, index }))
+      .filter((item) => item.player.seed !== undefined)
+      .sort((a, b) => a.player.seed! - b.player.seed! || a.index - b.index);
+
+    for (const { player } of seeded) {
+      let position = Math.max(0, Math.min(player.seed! - 1, positions.length - 1));
+      while (position < positions.length && positions[position]) position++;
+      if (position >= positions.length) {
+        position = 0;
+        while (position < positions.length && positions[position]) position++;
+      }
+      if (position < positions.length) positions[position] = player;
+    }
+
+    const unseeded = result.players.filter((player) => player.seed === undefined);
+    let nextUnseeded = 0;
+    const ordered = Array.from(
+      { length: positions.length },
+      (_, index) => positions[index] ?? unseeded[nextUnseeded++]!,
+    );
+    result = reorderPlayers(result, ordered.map((player) => player.id));
+  }
+
+  return result;
 }
 
 export function updatePlayer(
