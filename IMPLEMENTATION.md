@@ -25,6 +25,9 @@ A working PoC covering both spec acceptance scenarios end-to-end:
   export/import with validation, reload-safe.
 - **UI**: Tournament / Round / Standings / Bracket / Players / History nav;
   bracket shown only for single elimination.
+- **Media mode**: a read-only projector window receives sanitized snapshots
+  over `BroadcastChannel`, rotates standings / current round / bracket scenes
+  every 12 seconds, and splits up to 32 standings rows into two columns.
 
 ## Architectural decisions
 
