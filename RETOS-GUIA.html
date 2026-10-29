@@ -1,0 +1,261 @@
+<!doctype html><html lang="es-MX"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Retos · workshop-devin</title>
+<meta name="description" content="Retos del workshop de Devin Desktop para el repo workshop-devin (Tournament Runner: motor de reglas + app React).">
+<style>
+:root{--bg:#fff;--fg:#1a1a1a;--mut:#666;--line:#ddd;--box:#f6f6f6;--link:#0b57d0;color-scheme:light dark}
+@media(prefers-color-scheme:dark){:root{--bg:#111;--fg:#e8e8e8;--mut:#9a9a9a;--line:#333;--box:#1b1b1b;--link:#7fb0ff}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+main{max-width:720px;margin:0 auto;padding:40px 20px 80px}
+a{color:var(--link)}
+h1{font-size:2rem;line-height:1.2;margin:0 0 4px}
+h2{font-size:1.4rem;line-height:1.3;margin:0 0 4px}
+h3{font-size:1rem;margin:28px 0 6px}
+.sub{color:var(--mut);margin:0 0 20px}
+.meta{color:var(--mut);font-size:.9rem;margin:0 0 14px}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+code{background:var(--box);border:1px solid var(--line);border-radius:3px;padding:0 .3em;font-size:.88em}
+pre{margin:0;background:var(--box);border:1px solid var(--line);border-radius:6px;padding:12px 14px;overflow-x:auto;white-space:pre-wrap;word-break:break-word;font-size:.85rem;line-height:1.5}
+pre.p{font-family:inherit;font-size:.95rem}
+.box{position:relative;margin:8px 0}
+.copy{position:absolute;top:6px;right:6px;font:inherit;font-size:.75rem;color:var(--mut);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:2px 8px;cursor:pointer}
+.box pre{padding-right:70px}
+hr{border:0;border-top:1px solid var(--line);margin:44px 0}
+ul,ol{padding-left:1.3em}
+li{margin:.3em 0}
+ul.check{list-style:none;padding:0}
+ul.check li label{display:flex;gap:8px;align-items:flex-start}
+ul.check input{margin-top:.4em;flex:none}
+ul.check .box{margin:4px 0 8px 24px}
+details{margin:6px 0}
+summary{cursor:pointer;color:var(--mut)}
+details>div,details>ul{margin-top:6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.two>div{border:1px solid var(--line);border-radius:6px;padding:10px 12px}
+.two b{display:block;margin-bottom:4px}
+.note{border-left:3px solid var(--line);padding:2px 0 2px 12px;color:var(--mut)}
+@media(max-width:600px){.two{grid-template-columns:1fr}}
+</style></head><body><main>
+<h1>Retos</h1><p class="sub">Devin Desktop Workshop · Mexico Tech Week · <code>workshop-devin</code></p>
+<p>Un administrador de torneos (single elimination y Swiss, hasta 32 jugadores) con un motor de reglas puro y una app React que guarda todo en el navegador. Aquí las decisiones no son de código sino <b>de reglas de torneo</b>: en cuántas cosas Devin va a necesitar que tú, el organizador, decidas. Hay cinco retos; no tienes que hacerlos todos.</p>
+<h3>Cómo trabajar cada reto</h3><p>Entiende (dale contexto con @-menciones), planea (Plan mode), actúa (Implement) y verifica (tests, Quick Review, Merge).</p>
+<hr><h2>Antes de empezar</h2>
+<p>Necesitas Node y npm. Es un monorepo con dos workspaces: el motor de reglas (<code>packages/tournament-engine</code>, TypeScript puro, sin React) y la app del organizador (<code>apps/master-web</code>, React + Vite + Zustand + Dexie).</p>
+<div class="box"><button type="button" class="copy">Copiar</button><pre>npm install
+npm test            # pruebas del motor (Vitest)
+npm run build       # build de la app web
+npm run dev         # abre http://localhost:5173</pre></div>
+<p style="margin-top:12px">Los datos viven en IndexedDB del navegador. Para empezar de cero: DevTools → Application → IndexedDB → borra la base <code>tournament-runner</code>.</p>
+
+<h3>Reglas</h3><ol><li>Empieza cada reto en <b>Plan mode</b>. Lee el plan, corrígelo y solo entonces aprieta Implement.</li><li>Las reglas de torneo las decides tú. Si Devin dice &quot;asumí que…&quot;, párale y decide tú.</li><li>Primero la prueba que falla, luego el arreglo. Que Devin te enseñe el test <b>en rojo</b> antes de implementar.</li><li>Una sesión por reto. Para el reto Paralelo usa <b>Worktree</b> y revisa con <b>Quick Review</b> antes del Merge.</li><li>No le pidas a Devin que edite <code>README.md</code>: el archivo está codificado en UTF-16 y se puede corromper.</li></ol>
+<h3>Ojo con esto</h3><ul><li><code>npm run typecheck</code> puede fallar en el motor con errores de <code>node:fs</code>, <code>node:path</code> o <code>__dirname</code> (falta <code>@types/node</code>). Es un problema conocido de la línea base. Para revisar tipos de la app usa <code>npm run typecheck --workspace @tourney/master-web</code>.</li><li><code>npm test</code> <b>reescribe</b> los archivos de <code>sample-data/</code> con ids y fechas nuevas, y <code>npm run build</code> modifica <code>apps/master-web/dist/</code>. Antes de revisar un diff o de hacer commit, limpia con <code>git checkout -- sample-data apps/master-web/dist</code>.</li><li>Un Worktree nuevo **no trae <code>node_modules</code>**. Corre <code>npm install</code> dentro del Worktree antes de probar.</li><li>El documento <code>IMPLEMENTATION.md</code> dice que la app no necesita lógica por formato y que el bracket &quot;nunca se atora&quot;. Ambas cosas son más optimistas que el código. Confía en el código y en los tests.</li></ul>
+<hr><h2>Retos</h2><p><b>Ruta sugerida (~60 min):</b> 1, y luego 2 o 3. Si vas rápido, 4. El 5 es el más grande: el motor primero, la interfaz después.</p><ol>
+<li><a href="#r1">Importar CSV</a> <span class="meta">(Core, 15–20 min)</span></li>
+<li><a href="#r2">El bracket que se atora</a> <span class="meta">(Core, 15–20 min)</span></li>
+<li><a href="#r3">Win% de 200</a> <span class="meta">(Core, 15–20 min)</span></li>
+<li><a href="#r4">Round Robin y selector</a> <span class="meta">(Paralelo, 20–25 min)</span></li>
+<li><a href="#r5">Modo media</a> <span class="meta">(Jefe, 25–35 min)</span></li>
+</ol>
+<hr>
+<section id="r1">
+<h2>Reto 1 · Importar jugadores desde un .csv</h2>
+<p class="meta">Core · 15–20 min · Plan mode, Parser puro, Tests, UI</p>
+<p>Del archivo de Excel del organizador a un torneo listo. Las fotos de perfil llegan en otra fase.</p>
+<h3>La misión</h3>
+<p>En la pantalla de Setup, un botón <b>Importar CSV</b> que deje elegir un archivo, muestre una vista previa con los jugadores válidos y los errores por fila (con número de línea y mensaje claro), y solo al confirmar agregue los jugadores al torneo.</p>
+<p>Piensa en los CSV reales que salen de Excel en México: separador <code>;</code>, comillas, acentos, con o sin encabezado, líneas vacías. Para las fotos, solo deja el <b>hook mínimo</b> en el modelo; no construyas la interfaz de fotos todavía.</p>
+<h3>Una ayudita para arrancar</h3>
+<p class="meta">Es solo el comienzo. Escribe tu propio prompt y complétalo con lo que pide la misión.</p>
+<div class="box"><button type="button" class="copy">Copiar</button><pre class="p">Quiero importar jugadores desde un .csv en la pantalla de Setup (@apps/master-web/src/views/SetupView.tsx), con vista previa y errores por fila. Plan mode primero.</pre></div>
+<h3>Lo que tú decides</h3><ul>
+<li>¿Dónde vive el parser? El motor no tiene DOM, así que recibe un <code>string</code>, no un <code>File</code>.</li>
+<li>Si una fila falla: ¿importas todo o nada, o solo las filas válidas? ¿Agregas a los existentes o reemplazas la lista?</li>
+<li>Nombres repetidos: ¿bloquear, advertir o desambiguar?</li>
+<li>Si el CSV trae una columna <code>seed</code>, ¿se respeta siempre o solo en modo de siembra manual? ¿Y se lo dices al usuario en la vista previa?</li>
+<li>Más de 32 jugadores: ¿rechazas el archivo o truncas con aviso? ¿Cuentas a los que ya estaban?</li>
+<li>Para fotos: ¿una imagen embebida en el jugador o guardada aparte? ¿Subes <code>schemaVersion</code>?</li>
+</ul>
+<h3>¿Cómo sabes que terminó?</h3><ul class="check">
+<li><label><input type="checkbox"><span><code>npm test</code> pasa y hay tests nuevos del parser (BOM, saltos de línea de Windows, comillas, <code>;</code> y <code>,</code>, sin encabezado, líneas vacías, errores por línea).</span></label><div class="box"><button type="button" class="copy">Copiar</button><pre class="">npm test</pre></div></li>
+<li><label><input type="checkbox"><span><code>npm run build</code> pasa.</span></label><div class="box"><button type="button" class="copy">Copiar</button><pre class="">npm run build</pre></div></li>
+<li><label><input type="checkbox"><span>El typecheck de la app web pasa.</span></label><div class="box"><button type="button" class="copy">Copiar</button><pre class="">npm run typecheck --workspace @tourney/master-web</pre></div></li>
+<li><label><input type="checkbox"><span>Un CSV exportado desde Excel con acentos (<code>José</code>, <code>Ángeles</code>) se ve bien en la vista previa.</span></label></li>
+<li><label><input type="checkbox"><span>Un error en la fila 5 se reporta con &quot;línea 5&quot; y un mensaje claro, y no deja el torneo a medias.</span></label></li>
+<li><label><input type="checkbox"><span>Con el torneo ya iniciado, importar no es posible (la <b>operación</b> se defiende sola, no solo esconde el botón).</span></label></li>
+<li><label><input type="checkbox"><span>Un JSON exportado antes del cambio sigue importando sin problemas.</span></label></li>
+</ul>
+<h3>Archivos que vas a ver</h3><p><code>packages/tournament-engine/src/import/csv.ts (nuevo)</code> <code>packages/tournament-engine/src/operations.ts</code> <code>packages/tournament-engine/src/model/types.ts</code> <code>packages/tournament-engine/src/serialization.ts</code> <code>packages/tournament-engine/tests/ (tests nuevos)</code> <code>apps/master-web/src/views/SetupView.tsx</code> <code>apps/master-web/src/components/ (modal de importación)</code></p>
+<h3>Si te atoras</h3>
+<details><summary>Pista 1</summary><div>El motor no tiene DOM. Piensa qué función pura puede recibir un <code>string</code> y devolver las filas válidas más una lista de errores por línea. La interfaz solo lee el archivo y muestra ese resultado.</div></details>
+<details><summary>Pista 2</summary><div>Importar fila por fila con <code>addPlayer</code> puede dejar el torneo a medias si una falla. Considera una <b>operación única</b> que valide todo (borrador, tope de 32 contando los que ya estaban, nombres vacíos, seeds repetidos) y solo entonces agregue a todos.</div></details>
+<details><summary>Pista 3</summary><div>Para el CSV de Excel: quita el BOM, soporta CRLF y comillas escapadas, detecta el separador contando <code>,</code> <code>;</code> y tabulador en la primera línea fuera de comillas, y reconoce encabezados por alias sin acentos. Lee el archivo como <code>ArrayBuffer</code> y decodifica con <code>TextDecoder</code>.</div></details>
+<details><summary>Trampas conocidas (al final)</summary><ul>
+<li>Excel en español guarda a veces en Windows-1252 y no en UTF-8: <code>file.text()</code> da mojibake (<code>Jos�</code>). Lee el <code>ArrayBuffer</code>, intenta UTF-8 estricto y cae a windows-1252.</li>
+<li>El BOM <code>U+FEFF</code> hace que el primer encabezado <code>Nombre</code> no coincida con nada. Quítalo.</li>
+<li>Un encabezado que no reconoces (por ejemplo <code>Participante</code>) se interpreta como fila de datos y crea un jugador llamado &quot;Participante&quot;. Decide y pruébalo.</li>
+<li>Las columnas <code>seed</code> solo tienen efecto en modo manual: los otros modos las sobrescriben, y las flechas ↑↓ del Setup renumeran todo. Sin aviso, el usuario cree que se respetaron.</li>
+<li><code>updatePlayer</code> no exige que el torneo esté en borrador. La protección &quot;no importar con el torneo iniciado&quot; debe ir explícita en la operación nueva.</li>
+</ul></details>
+</section>
+<hr>
+<section id="r2">
+<h2>Reto 2 · El bracket que se atora</h2>
+<p class="meta">Core · 15–20 min · Plan mode, Bug real, Prueba primero</p>
+<p>La documentación dice &quot;nunca se atora&quot;. Descalifica al seed 1 en un torneo de tres y compruébalo.</p>
+<h3>La misión</h3>
+<p>Hay un bug real en la eliminación simple. Con 3 jugadores, si descalificas al seed 1 (que tenía el bye) y juegas P2 vs P3, el torneo se queda <b>activo sin campeón</b>. Pasa también al dar de baja a un jugador que ya avanzó, o con un empate en una semifinal.</p>
+<p>Hay dos problemas con el mismo síntoma: una causa raíz en el código, y una regla de negocio sin definir (¿qué hace un empate en eliminación directa?). <b>Primero la prueba que falla.</b></p>
+<h3>Una ayudita para arrancar</h3>
+<p class="meta">Es solo el comienzo. Escribe tu propio prompt y complétalo con lo que pide la misión.</p>
+<div class="box"><button type="button" class="copy">Copiar</button><pre class="p">Con 3 jugadores, si descalifico al seed 1 el torneo se queda activo sin campeón. Escribe primero una prueba que falle en @packages/tournament-engine/tests/single-elimination.test.ts y explícame la causa en Plan mode.</pre></div>
+<h3>Lo que tú decides</h3><ul>
+<li>Para un empate (o doble derrota) en eliminación directa: ¿rechazarlo, pedir repetición del partido, o desempatar por seed?</li>
+<li>¿El arreglo es normalizar dónde cae el jugador del bye, o cambiar cómo se calcula el ganador?</li>
+<li>Si ya no se permiten ciertos resultados, ¿la interfaz deja de ofrecer esos botones?</li>
+</ul>
+<h3>¿Cómo sabes que terminó?</h3><ul class="check">
+<li><label><input type="checkbox"><span>Viste los tests nuevos <b>fallar</b> antes de implementar (escenarios 1, 2 y 3).</span></label></li>
+<li><label><input type="checkbox"><span><code>npm test</code> pasa: los tests nuevos de los escenarios 1 y 2 terminan con estado COMPLETE y campeón, y los 47 anteriores siguen verdes.</span></label><div class="box"><button type="button" class="copy">Copiar</button><pre class="">npm test</pre></div></li>
+<li><label><input type="checkbox"><span>Escenario 1: el campeón es P2 o P3 (el que gane); nunca &quot;activo sin campeón&quot;.</span></label></li>
+<li><label><input type="checkbox"><span>Escenario 2: P4 aparece en la final y el torneo termina con campeón.</span></label></li>
+<li><label><input type="checkbox"><span>Para empate o doble derrota se aplica la regla que <b>tú</b> elegiste, con su test, y la interfaz ya no ofrece esos botones en eliminación simple (compruébalo con <code>npm run dev</code> y 4 jugadores).</span></label></li>
+</ul>
+<h3>Archivos que vas a ver</h3><p><code>packages/tournament-engine/src/formats/util.ts</code> <code>packages/tournament-engine/src/formats/single-elimination/index.ts</code> <code>packages/tournament-engine/tests/single-elimination.test.ts</code> <code>apps/master-web/src/components/MatchCard.tsx</code></p>
+<h3>Si te atoras</h3>
+<details><summary>Pista 1</summary><div>Mira cómo <code>winnerOf</code> decide quién gana un partido con bye. ¿Qué asume sobre en cuál lado (A o B) está el jugador?</div></details>
+<details><summary>Pista 2</summary><div>Hay que resolver <b>dos cosas distintas</b>: la causa raíz del escenario 1 y 2, y la regla de empates del escenario 3. Arreglar solo la primera deja el reto a la mitad.</div></details>
+<details><summary>Trampas conocidas (al final)</summary><ul>
+<li>Devin tiende a parchar <code>settleMatch</code> intercambiando lados y dar el problema por cerrado, dejando los empates sin resolver.</li>
+<li>La documentación dice &quot;nunca se atora&quot; y el código lo desmiente. Después de arreglar, corrige <code>IMPLEMENTATION.md</code>.</li>
+<li><code>npm test</code> ensucia <code>sample-data/</code>: limpia antes de revisar el diff.</li>
+</ul></details>
+</section>
+<hr>
+<section id="r3">
+<h2>Reto 3 · Win% de 200%: arregla los byes en los standings</h2>
+<p class="meta">Core · 15–20 min · Plan mode, Bug real, Reglas de desempate</p>
+<p>Un porcentaje de victorias no puede pasar de 100%. En un Swiss de 5 jugadores, sí pasa.</p>
+<h3>La misión</h3>
+<p>Reproducción: un Swiss de 5 jugadores, donde gana siempre el jugador A durante 2 rondas. P5 (1 bye y 1 victoria) muestra <b>Win% 200%</b> y P3 (0-2) muestra <b>Opp% 150%</b>.</p>
+<p>Hay varias convenciones válidas en torneos reales para tratar los byes. Elegir una es <b>decisión tuya</b>; ningún porcentaje puede salir de 0–100%.</p>
+<h3>Una ayudita para arrancar</h3>
+<p class="meta">Es solo el comienzo. Escribe tu propio prompt y complétalo con lo que pide la misión.</p>
+<div class="box"><button type="button" class="copy">Copiar</button><pre class="p">En un Swiss de 5 jugadores, un jugador con bye muestra Win% 200%. Escribe primero la prueba que falla (@packages/tournament-engine/tests/standings.test.ts) y dame opciones de convención antes de implementar.</pre></div>
+<h3>Lo que tú decides</h3><ul>
+<li>¿El bye cuenta como un partido ganado (100%), no cuenta para Win% (convención de Magic: solo suma puntos), o simplemente se recorta a 100%?</li>
+<li>¿Hay un piso para el porcentaje de un rival al calcular Opp% (por ejemplo, 33%)?</li>
+<li>¿Qué tests existentes sobre el bye cambian? ¿Con qué justificación?</li>
+</ul>
+<h3>¿Cómo sabes que terminó?</h3><ul class="check">
+<li><label><input type="checkbox"><span><code>npm test</code> pasa y hay al menos 3 tests nuevos en <code>standings.test.ts</code> (por ejemplo, 5 jugadores y 2 rondas: todo Win% y Opp% está en [0, 1]).</span></label><div class="box"><button type="button" class="copy">Copiar</button><pre class="">npm test</pre></div></li>
+<li><label><input type="checkbox"><span>En el escenario del bug, ningún Win% ni Opp% pasa de 100%.</span></label></li>
+<li><label><input type="checkbox"><span>La convención que <b>tú</b> elegiste tiene un test explícito que la documenta.</span></label></li>
+<li><label><input type="checkbox"><span>Dos jugadores con Opp% matemáticamente iguales se resuelven por enfrentamiento directo, no por seed (cuidado con comparar floats con <code>===</code>).</span></label></li>
+<li><label><input type="checkbox"><span>El texto de <code>StandingsView.tsx</code> e <code>IMPLEMENTATION.md</code> describen la convención elegida.</span></label></li>
+</ul>
+<h3>Archivos que vas a ver</h3><p><code>packages/tournament-engine/src/standings/index.ts</code> <code>packages/tournament-engine/tests/standings.test.ts</code> <code>apps/master-web/src/views/StandingsView.tsx</code> <code>IMPLEMENTATION.md</code></p>
+<h3>Si te atoras</h3>
+<details><summary>Pista 1</summary><div>Mira <code>matchWinPct</code> y qué entra al numerador y al denominador cuando hay un bye.</div></details>
+<details><summary>Pista 2</summary><div>Cambiar el Win% de un jugador cambia el Opp% de sus rivales: revisa los dos juntos.</div></details>
+<details><summary>Trampas conocidas (al final)</summary><ul>
+<li>Devin suele elegir &quot;recortar a 1.0&quot; (un parche) o la convención de Magic <b>sin avisar</b>. Exige las opciones con sus costos antes de decidir.</li>
+<li>La documentación dice &quot;convención de Magic&quot; pero no implementa el piso del 33%.</li>
+<li>Comparar porcentajes con <code>===</code> falla por redondeo de floats: dos jugadores matemáticamente empatados no empatan.</li>
+</ul></details>
+</section>
+<hr>
+<section id="r4">
+<h2>Reto 4 · Dos frentes: motor de Round Robin y selector de torneos</h2>
+<p class="meta">Paralelo · 20–25 min · Worktree, Paralelo, Quick Review, Merge</p>
+<p>Un formato nuevo en el motor y una lista de torneos en la app. Dos zonas del repo, dos agentes, un Merge.</p>
+<h3>La misión</h3>
+<p><b>Sesión A:</b> un nuevo formato, <b>Round Robin</b> (todos contra todos), como un <code>TournamentFormatEngine</code> más. <b>Sesión B:</b> un <b>selector de torneos</b>: hoy la app solo carga el torneo más reciente y los anteriores se quedan olvidados en IndexedDB.</p>
+<p>Cada una en su propia sesión <b>Worktree</b>. Cuando terminen, Quick Review de cada diff y luego Merge. Después, el paso de 3 minutos: exponer Round Robin en <code>SetupView</code>. Ese archivo no lo toca ninguna de las dos sesiones.</p>
+<h3>Dos sesiones, dos zonas</h3><div class="two">
+<div><b>SESIÓN A · MOTOR</b>Un formato nuevo registrado con <code>registerEngine</code>, con pruebas. Solo en el motor.<br><code>packages/tournament-engine/src/formats/round-robin/</code> <code>packages/tournament-engine/src/model/types.ts</code> <code>packages/tournament-engine/src/index.ts</code> <code>packages/tournament-engine/tests/round-robin.test.ts</code></div>
+<div><b>SESIÓN B · SELECTOR</b>Lista de torneos guardados, con abrir, renombrar y borrar. Solo en la app.<br><code>apps/master-web/src/db.ts</code> <code>apps/master-web/src/store.ts</code> <code>apps/master-web/src/App.tsx</code> <code>apps/master-web/src/components/TournamentPicker.tsx</code></div>
+</div>
+<h3>Una ayudita para arrancar</h3>
+<p class="meta">Es solo el comienzo. Escribe tu propio prompt y complétalo con lo que pide la misión.</p>
+<p><b>Sesión A (Worktree)</b></p>
+<div class="box"><button type="button" class="copy">Copiar</button><pre class="p">Quiero un formato Round Robin en el motor (@packages/tournament-engine/src/engine.ts). Plan mode primero. Solo packages/tournament-engine: otra sesión trabaja en la app.</pre></div>
+<p><b>Sesión B (Worktree)</b></p>
+<div class="box"><button type="button" class="copy">Copiar</button><pre class="p">Quiero un selector de torneos guardados en la app (@apps/master-web/src/db.ts). Plan mode primero. No toques el motor: otra sesión trabaja ahí.</pre></div>
+<h3>Lo que tú decides</h3><ul>
+<li>A: ¿Cuántas rondas hay con N jugadores? ¿Y con N impar? ¿Hay vuelta doble?</li>
+<li>A: ¿Cómo se desempata? ¿Sirve el Opp% de los otros formatos, o en todos contra todos se usa el enfrentamiento directo?</li>
+<li>A: Si un jugador se baja a media competencia, ¿qué pasa con sus partidos pendientes?</li>
+<li>B: Si borras el torneo activo, ¿qué se muestra? ¿Cómo evitas el clic accidental?</li>
+<li>B: ¿Cómo cambias de torneo sin dejar estado del anterior en el store?</li>
+</ul>
+<h3>¿Cómo sabes que terminó?</h3><ul class="check">
+<li><label><input type="checkbox"><span>Cada sesión trabajó en su Worktree y tocó <b>solo</b> sus archivos (<code>git diff --stat</code> en cada una).</span></label><div class="box"><button type="button" class="copy">Copiar</button><pre class="">git diff --stat</pre></div></li>
+<li><label><input type="checkbox"><span>Corriste <code>npm install</code> dentro de cada Worktree antes de probar.</span></label></li>
+<li><label><input type="checkbox"><span>Quick Review de cada diff antes del Merge, sin hallazgos serios sin resolver.</span></label></li>
+<li><label><input type="checkbox"><span>Round Robin: con 4 jugadores hay 3 rondas y todos juegan contra todos exactamente una vez; con 5 jugadores cada uno descansa una ronda.</span></label></li>
+<li><label><input type="checkbox"><span>Selector: crea dos torneos, cambia entre ellos, recarga la página y los dos siguen ahí. Borrar el activo pide confirmación.</span></label></li>
+<li><label><input type="checkbox"><span>Después del Merge: pruebas y build pasan, y Round Robin aparece como opción en <code>SetupView</code>.</span></label><div class="box"><button type="button" class="copy">Copiar</button><pre class="">npm test &amp;&amp; npm run build &amp;&amp; npm run typecheck --workspace @tourney/master-web</pre></div></li>
+</ul>
+<h3>Si te atoras</h3>
+<details><summary>Pista 1</summary><div>Para Round Robin, el método del círculo fija un jugador y rota el resto. Con N impar, agrega un &quot;fantasma&quot; que representa el bye.</div></details>
+<details><summary>Pista 2</summary><div>Para el selector, la tabla de torneos de <code>db.ts</code> ya existe: el trabajo es leerla, mostrarla y no mezclar estados.</div></details>
+<details><summary>Pista 3</summary><div>Si el Merge choca, probablemente tocaron los dos <code>index.ts</code> o <code>store.ts</code>: resuélvelo a mano, conserva ambos.</div></details>
+<details><summary>Trampas conocidas (al final)</summary><ul>
+<li>Un Worktree no trae <code>node_modules</code>: sin <code>npm install</code> ahí, nada corre.</li>
+<li><code>npm test</code> y <code>npm run build</code> ensucian <code>sample-data/</code> y <code>apps/master-web/dist/</code>: limpia antes del Quick Review o saldrán cambios que no son tuyos.</li>
+<li>Un formato nuevo debe registrarse con <code>registerEngine</code>; si no, la app no lo encuentra.</li>
+</ul></details>
+</section>
+<hr>
+<section id="r5">
+<h2>Reto 5 · Jefe: modo media, la pantalla del proyector</h2>
+<p class="meta">Jefe · 25–35 min · Megaplan, Sincronización, Sin servidor</p>
+<p>Una pantalla adicional que muestra standings, pareos y resultados conforme el organizador los captura.</p>
+<h3>La misión</h3>
+<p>Una vista de <b>solo lectura</b> que se abre en otra ventana (un proyector, un segundo monitor) y se actualiza sola mientras el organizador captura resultados en el panel. Todo <b>100% offline</b>, en el mismo navegador, sin servidor.</p>
+<p>Tiene que leerse a distancia (letra grande), rotar sola entre standings, ronda actual y bracket, y <b>no mostrar datos sensibles del arbitraje</b>: notas, razones de warnings o penalizaciones, razones de drop y descalificación, historial.</p>
+<h3>Una ayudita para arrancar</h3>
+<p class="meta">Es solo el comienzo. Escribe tu propio prompt y complétalo con lo que pide la misión.</p>
+<div class="box"><button type="button" class="copy">Copiar</button><pre class="p">Quiero un modo media: una segunda ventana de solo lectura que muestre standings y pareos en vivo, sin servidor. Pide un megaplan y propón cómo se sincronizan las ventanas antes de escribir código.</pre></div>
+<h3>Lo que tú decides</h3><ul>
+<li>¿Quién es la fuente de verdad? ¿El panel publica y la ventana media es una réplica, o la ventana media lee IndexedDB?</li>
+<li>¿Qué se transmite: el torneo completo ya limpiado o parches? Con 32 jugadores, ¿cuál es más simple y menos propenso a desincronizarse?</li>
+<li>¿Qué ve la ventana media si se abre <b>después</b> que el panel? ¿Y si el panel está cerrado?</li>
+<li>¿Qué datos se ocultan? ¿Los nombres de jugadores descalificados? ¿El conteo de warnings?</li>
+<li>Swiss no tiene bracket: ¿qué escenas rotan en cada formato y cada cuántos segundos?</li>
+</ul>
+<h3>¿Cómo sabes que terminó?</h3><ul class="check">
+<li><label><input type="checkbox"><span><code>npm run build</code> pasa.</span></label><div class="box"><button type="button" class="copy">Copiar</button><pre class="">npm run build</pre></div></li>
+<li><label><input type="checkbox"><span>El typecheck de la app web pasa.</span></label><div class="box"><button type="button" class="copy">Copiar</button><pre class="">npm run typecheck --workspace @tourney/master-web</pre></div></li>
+<li><label><input type="checkbox"><span>Hay pruebas que demuestran que dos &quot;pestañas&quot; simuladas convergen al mismo estado, incluida una que se abre tarde.</span></label></li>
+<li><label><input type="checkbox"><span>Hay una prueba que demuestra que <b>no se filtran</b> warnings, penalizaciones, razones de drop/DQ ni historial.</span></label></li>
+<li><label><input type="checkbox"><span>En el navegador: abre el panel, luego <code>?view=media</code> en otra pestaña, captura un resultado y la vista media cambia sola.</span></label></li>
+<li><label><input type="checkbox"><span>La vista media no importa el store ni la capa de Dexie (compruébalo con un <code>grep</code> o con una prueba).</span></label></li>
+<li><label><input type="checkbox"><span>Con 32 jugadores la tabla de standings sigue legible (paginación o desplazamiento automático).</span></label></li>
+</ul>
+<h3>Archivos que vas a ver</h3><p><code>apps/master-web/src/media/ (nuevo)</code> <code>apps/master-web/src/main.tsx</code> <code>apps/master-web/src/App.tsx</code> <code>apps/master-web/tests/ (nuevo)</code></p>
+<h3>Si te atoras</h3>
+<details><summary>Pista 1</summary><div>Piensa en una sola fuente de verdad: el panel ya tiene el estado en Zustand. La ventana media solo debería recibir copias y nunca importar el store ni la capa de Dexie. ¿Qué API del navegador permite hablar entre pestañas del mismo origen sin servidor?</div></details>
+<details><summary>Pista 2</summary><div>Usa <code>BroadcastChannel</code> con un mensaje que la ventana media envía al abrirse (para pedir el estado actual) y que el panel responda; además el panel publica cada vez que cambia el torneo. Antes de emitir, pasa el torneo por una función que quite los datos sensibles.</div></details>
+<details><summary>Pista 3</summary><div>Estructura: un módulo puro de canal con interfaz mínima para probarlo con Vitest, un número de secuencia por emisor para ignorar mensajes viejos, y en <code>main.tsx</code> decide por <code>?view=media</code> qué raíz renderizar.</div></details>
+<details><summary>Trampas conocidas (al final)</summary><ul>
+<li><code>StrictMode</code> de React monta los efectos dos veces: crea y cierra el <code>BroadcastChannel</code> dentro de un <code>useEffect</code> con limpieza, y haz idempotente al publicador.</li>
+<li>La app web no tiene Vitest propio: funciona porque el del motor está elevado. Para un <code>npm test</code> limpio, agrégalo como dependencia de desarrollo.</li>
+<li>El <code>tsconfig</code> de la app solo incluye <code>src</code>: los tests nuevos no se tipan, y <code>node:fs</code> o <code>__dirname</code> en tests falla por falta de <code>@types/node</code>.</li>
+<li>El typecheck de la raíz ya falla en la línea base por el motor: corre el de <code>@tourney/master-web</code> por separado.</li>
+<li><code>addPlayer(t, displayName)</code> recibe un <code>string</code>, no un objeto; es un error fácil al escribir tests.</li>
+<li>Que la vista media sea de solo lectura se logra con la estructura de imports, no con el navegador. Pruébalo.</li>
+</ul></details>
+</section>
+<hr><p class="note">Repo: <code>workshop-devin</code>. Si cambias reglas del motor, actualiza <code>IMPLEMENTATION.md</code> (no el README).</p>
+</main><script>
+[].forEach.call(document.querySelectorAll('.copy'),function(b){
+  b.addEventListener('click',function(){
+    var pre=b.parentNode.querySelector('pre'),t=pre.innerText.replace(/\n+$/,'');
+    function ok(){b.textContent='Copiado';setTimeout(function(){b.textContent='Copiar'},1200)}
+    function fb(){var r=document.createRange();r.selectNodeContents(pre);var s=getSelection();s.removeAllRanges();s.addRange(r);try{document.execCommand('copy');ok()}catch(e){}}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,fb)}else{fb()}
+  });
+});
+</script></body></html>

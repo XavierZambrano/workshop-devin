@@ -1,0 +1,59 @@
+<!doctype html><html lang="es-MX"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Retos · workshop-devin</title>
+<meta name="description" content="Retos del workshop de Devin Desktop para el repo workshop-devin (Tournament Runner: motor de reglas + app React).">
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:#020617;color:#f1f5f9;font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 50% -10%,rgba(14,116,144,.18),transparent 70%)}
+header{border-bottom:1px solid #1e293b;background:rgba(15,23,42,.85)}
+header .bar{max-width:680px;margin:0 auto;padding:14px 20px;display:flex;align-items:baseline;gap:12px}
+.wordmark{font-size:1.15rem;font-weight:800;letter-spacing:-.02em}
+.wordmark span{color:#38bdf8}
+.tag{font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#7dd3fc;background:rgba(2,26,46,.6);border:1px solid #0369a1;border-radius:4px;padding:2px 8px}
+main{max-width:680px;margin:0 auto;padding:56px 20px 80px;position:relative}
+h1{font-size:2.8rem;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:0 0 8px}
+.sub{color:#94a3b8;margin:0 0 8px;font-size:1.05rem}
+.sub code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#0f172a;border:1px solid #334155;border-radius:4px;padding:0 .35em;font-size:.85em;color:#cbd5e1}
+.intro{margin:20px 0 12px;color:#cbd5e1;max-width:56ch}
+.ruta{color:#64748b;font-size:.9rem;margin:0 0 36px}
+ol.retos{list-style:none;margin:0 0 40px;padding:0;display:flex;flex-direction:column;gap:14px;counter-reset:reto}
+ol.retos li{counter-increment:reto}
+ol.retos a{position:relative;display:flex;gap:18px;align-items:flex-start;padding:20px 22px;border:1px solid #334155;border-radius:12px;background:#0f172a;color:#f1f5f9;text-decoration:none;transition:border-color .15s,background .15s,transform .15s,box-shadow .15s}
+ol.retos a:hover{border-color:#0369a1;background:#111d31;transform:translateY(-1px);box-shadow:0 8px 30px rgba(2,132,199,.12)}
+ol.retos a:active{transform:translateY(0)}
+.num{flex:none;width:40px;height:40px;border-radius:10px;border:1px solid #334155;background:#1e293b;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.05rem;color:#7dd3fc}
+.num::before{content:counter(reto)}
+ol.retos a:hover .num{border-color:#0369a1;background:rgba(2,26,46,.6)}
+input.chk{position:absolute;top:20px;right:20px;width:22px;height:22px;accent-color:#0284c7;cursor:pointer}
+.body{flex:1;min-width:0;padding-right:36px}
+.t{display:block;font-size:1.25rem;font-weight:700;letter-spacing:-.01em;line-height:1.3}
+.d{display:block;color:#94a3b8;font-size:.95rem;margin-top:4px}
+.m{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.pill{font-size:.68rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;border-radius:4px;padding:2px 8px;border:1px solid}
+.pill.diff-core{color:#7dd3fc;background:rgba(2,26,46,.6);border-color:#0369a1}
+.pill.diff-par{color:#fcd34d;background:rgba(69,26,3,.5);border-color:#b45309}
+.pill.diff-boss{color:#fda4af;background:rgba(76,5,25,.5);border-color:#be123c}
+.pill.time{color:#94a3b8;background:#1e293b;border-color:#334155}
+.guia{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px;border-radius:12px;background:#0369a1;color:#fff;font-weight:700;font-size:1.05rem;text-decoration:none;transition:background .15s;box-shadow:0 4px 20px rgba(2,132,199,.25)}
+.guia:hover{background:#0284c7}
+.note{color:#64748b;font-size:.9rem;text-align:center;margin:20px 0 0}
+.note a{color:#38bdf8}
+</style></head><body>
+<header><div class="bar"><span class="wordmark">Tournament<span> Runner</span></span><span class="tag">Devin Desktop Workshop</span></div></header>
+<main>
+<h1>Retos</h1>
+<p class="sub">Mexico Tech Week · <code>workshop-devin</code></p>
+<p class="intro">Un administrador de torneos (single elimination y Swiss, hasta 32 jugadores) con un motor de reglas puro y una app React que guarda todo en el navegador. Aquí las decisiones no son de código sino <b>de reglas de torneo</b>. Hay cinco retos; no tienes que hacerlos todos.</p>
+<p class="ruta">Ruta sugerida (~60 min): 1, y luego 2 o 3. Si vas rápido, 4. El 5 es el más grande.</p>
+<ol class="retos">
+<li><a href="RETOS-GUIA.html#r1"><span class="num"></span><span class="body"><span class="t">Importar CSV</span><span class="d">Del archivo de Excel del organizador a un torneo listo, con vista previa y errores por fila.</span><span class="m"><span class="pill diff-core">Core</span><span class="pill time">15–20 min</span><span class="pill time">Plan mode</span><span class="pill time">Parser + Tests + UI</span></span></span><input type="checkbox" class="chk" onclick="event.preventDefault()"></a></li>
+<li><a href="RETOS-GUIA.html#r2"><span class="num"></span><span class="body"><span class="t">El bracket que se atora</span><span class="d">La documentación dice "nunca se atora". Descalifica al seed 1 en un torneo de tres y compruébalo.</span><span class="m"><span class="pill diff-core">Core</span><span class="pill time">15–20 min</span><span class="pill time">Bug real</span><span class="pill time">Prueba primero</span></span></span><input type="checkbox" class="chk" onclick="event.preventDefault()"></a></li>
+<li><a href="RETOS-GUIA.html#r3"><span class="num"></span><span class="body"><span class="t">Win% de 200</span><span class="d">Un porcentaje de victorias no puede pasar de 100%. En un Swiss de 5 jugadores, sí pasa.</span><span class="m"><span class="pill diff-core">Core</span><span class="pill time">15–20 min</span><span class="pill time">Bug real</span><span class="pill time">Reglas de desempate</span></span></span><input type="checkbox" class="chk" onclick="event.preventDefault()"></a></li>
+<li><a href="RETOS-GUIA.html#r4"><span class="num"></span><span class="body"><span class="t">Round Robin y selector</span><span class="d">Un formato nuevo en el motor y una lista de torneos en la app. Dos sesiones, un Merge.</span><span class="m"><span class="pill diff-par">Paralelo</span><span class="pill time">20–25 min</span><span class="pill time">Worktree</span><span class="pill time">Quick Review + Merge</span></span></span><input type="checkbox" class="chk" onclick="event.preventDefault()"></a></li>
+<li><a href="RETOS-GUIA.html#r5"><span class="num"></span><span class="body"><span class="t">Modo media</span><span class="d">La pantalla del proyector: standings, pareos y resultados en vivo, 100% offline.</span><span class="m"><span class="pill diff-boss">Jefe</span><span class="pill time">25–35 min</span><span class="pill time">Megaplan</span><span class="pill time">Sin servidor</span></span></span><input type="checkbox" class="chk" onclick="event.preventDefault()"></a></li>
+</ol>
+<a class="guia" href="RETOS-GUIA.html">Abrir la guía completa <span aria-hidden="true">→</span></a>
+<p class="note">La guía tiene la misión, las decisiones, las pistas y las trampas de cada reto.</p>
+</main></body></html>
