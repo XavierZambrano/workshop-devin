@@ -60,8 +60,8 @@ export function StandingsView({ t }: { t: Tournament }) {
         </table>
       </div>
       <p className="mt-3 text-sm text-slate-500">
-        Tiebreakers: match points → opponent match-win % → head-to-head → seed. Win% and Opp%
-        exclude byes.
+        Tiebreakers: match points → opponent match-win % → head-to-head → seed. Bye points count
+        toward match points; Win% uses played matches only, and Opp% has a 33% floor.
       </p>
     </div>
   );

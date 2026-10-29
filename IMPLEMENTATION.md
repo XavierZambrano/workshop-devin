@@ -45,8 +45,9 @@ A working PoC covering both spec acceptance scenarios end-to-end:
 
 ## Deviations from the spec
 
-- `matchWinPct`/`Opp%` exclude byes from the *denominator* (MTG convention):
-  a bye grants points but is not a "played" match. Documented in README.
+- Bye points count toward match points, while `matchWinPct` uses only points from
+  played matches. `Opp%` averages opponents' `matchWinPct` with a 1/3 floor
+  (Magic/MTR convention).
 - `PENALTY.DISQUALIFICATION` records the sanction; actual removal requires the
   explicit **Disqualify** action — the UI says so in the penalty dialog. This
   keeps "the resulting state change explicit and auditable" per spec.
@@ -60,7 +61,7 @@ A working PoC covering both spec acceptance scenarios end-to-end:
 
 ## Test coverage
 
-47 tests across 4 files: bracket sizing (2/4/8/13/17/32), seed order, bye
+50 tests across 4 files: bracket sizing (2/4/8/13/17/32), seed order, bye
 assignment and top-seed distribution, advancement, champion, correction
 cascade, drop/DQ walkovers; Swiss round-1 split, score-group pairing, rematch
 and repeat-bye avoidance, drops/DQ exclusion, round gating, planned-round

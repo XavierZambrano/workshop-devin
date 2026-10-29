@@ -15,15 +15,16 @@ export interface StandingEntry {
   byes: number;
   /** Completed non-bye, non-void matches the player participated in. */
   matchesPlayed: number;
-  /** matchPoints / (matchesPlayed * winPoints). Byes excluded from the denominator. */
+  /** Played-match points / (matchesPlayed * winPoints). Bye points are excluded. */
   matchWinPct: number;
-  /** Average match-win percentage of all opponents faced (byes excluded). */
+  /** Average opponent match-win percentage with a 1/3 floor (byes excluded). */
   oppMatchWinPct: number;
 }
 
 interface Accumulator {
   playerId: string;
   matchPoints: number;
+  playedPoints: number;
   wins: number;
   losses: number;
   draws: number;
@@ -43,6 +44,7 @@ function accumulate(t: Tournament): Map<string, Accumulator> {
     acc.set(p.id, {
       playerId: p.id,
       matchPoints: 0,
+      playedPoints: 0,
       wins: 0,
       losses: 0,
       draws: 0,
@@ -69,6 +71,7 @@ function accumulate(t: Tournament): Map<string, Accumulator> {
       if (kind === 'draw') self.draws += 1;
       self.matchesPlayed += 1;
       self.matchPoints += points;
+      self.playedPoints += points;
       if (oppId) self.opponents.push(oppId);
     };
 
@@ -102,14 +105,25 @@ function accumulate(t: Tournament): Map<string, Accumulator> {
   return acc;
 }
 
-export function matchWinPct(a: { matchPoints: number; matchesPlayed: number }, winPoints: number): number {
+const OPPONENT_WIN_PCT_FLOOR = 1 / 3;
+const OPPONENT_WIN_PCT_EPSILON = 1e-9;
+
+function clampPct(pct: number): number {
+  if (!Number.isFinite(pct)) return 0;
+  return Math.max(0, Math.min(1, pct));
+}
+
+export function matchWinPct(
+  a: { playedPoints: number; matchesPlayed: number },
+  winPoints: number,
+): number {
   if (a.matchesPlayed === 0) return 0;
-  return a.matchPoints / (a.matchesPlayed * winPoints);
+  return clampPct(a.playedPoints / (a.matchesPlayed * winPoints));
 }
 
 /**
  * Opponent Match Win Percentage: the mean of each faced opponent's
- * match-win percentage. Byes are not opponents.
+ * match-win percentage, with a 1/3 floor. Byes are not opponents.
  */
 export function computeStandings(t: Tournament): StandingEntry[] {
   const acc = accumulate(t);
@@ -119,9 +133,10 @@ export function computeStandings(t: Tournament): StandingEntry[] {
     const oppPcts = a.opponents
       .map((id) => acc.get(id))
       .filter((o): o is Accumulator => !!o)
-      .map((o) => matchWinPct(o, win));
-    const oppMatchWinPct =
-      oppPcts.length > 0 ? oppPcts.reduce((s, v) => s + v, 0) / oppPcts.length : 0;
+      .map((o) => Math.max(OPPONENT_WIN_PCT_FLOOR, matchWinPct(o, win)));
+    const oppMatchWinPct = clampPct(
+      oppPcts.length > 0 ? oppPcts.reduce((s, v) => s + v, 0) / oppPcts.length : 0,
+    );
     return {
       playerId: a.playerId,
       rank: 0,
@@ -159,7 +174,8 @@ export function computeStandings(t: Tournament): StandingEntry[] {
 
   entries.sort((x, y) => {
     if (y.matchPoints !== x.matchPoints) return y.matchPoints - x.matchPoints;
-    if (y.oppMatchWinPct !== x.oppMatchWinPct) return y.oppMatchWinPct - x.oppMatchWinPct;
+    const oppPctDifference = y.oppMatchWinPct - x.oppMatchWinPct;
+    if (Math.abs(oppPctDifference) > OPPONENT_WIN_PCT_EPSILON) return oppPctDifference;
     return fallback(x, y);
   });
 
@@ -171,7 +187,8 @@ export function computeStandings(t: Tournament): StandingEntry[] {
     while (
       j < entries.length &&
       entries[j]!.matchPoints === entries[i]!.matchPoints &&
-      entries[j]!.oppMatchWinPct === entries[i]!.oppMatchWinPct
+      Math.abs(entries[j]!.oppMatchWinPct - entries[i]!.oppMatchWinPct) <=
+        OPPONENT_WIN_PCT_EPSILON
     ) {
       j++;
     }
