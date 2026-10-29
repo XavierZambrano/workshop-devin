@@ -5,7 +5,7 @@
 
 export const SCHEMA_VERSION = 1;
 
-export type TournamentFormat = 'SINGLE_ELIMINATION' | 'SWISS';
+export type TournamentFormat = 'SINGLE_ELIMINATION' | 'SWISS' | 'ROUND_ROBIN';
 
 export type TournamentStatus = 'DRAFT' | 'ACTIVE' | 'COMPLETE';
 

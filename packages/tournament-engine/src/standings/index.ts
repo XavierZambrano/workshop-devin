@@ -157,44 +157,96 @@ export function computeStandings(t: Tournament): StandingEntry[] {
     return x.playerId < y.playerId ? -1 : x.playerId > y.playerId ? 1 : 0;
   };
 
-  entries.sort((x, y) => {
-    if (y.matchPoints !== x.matchPoints) return y.matchPoints - x.matchPoints;
-    if (y.oppMatchWinPct !== x.oppMatchWinPct) return y.oppMatchWinPct - x.oppMatchWinPct;
-    return fallback(x, y);
-  });
-
-  // Resolve head-to-head inside groups tied on (points, opp%) where it is
-  // unambiguous: order subgroup members by wins against others in the group.
-  let i = 0;
-  while (i < entries.length) {
-    let j = i + 1;
-    while (
-      j < entries.length &&
-      entries[j]!.matchPoints === entries[i]!.matchPoints &&
-      entries[j]!.oppMatchWinPct === entries[i]!.oppMatchWinPct
-    ) {
-      j++;
-    }
-    if (j - i > 1) {
-      const group = entries.slice(i, j);
-      const ids = new Set(group.map((g) => g.playerId));
-      const intraWins = new Map<string, number>(group.map((g) => [g.playerId, 0]));
-      for (const g of group) {
-        const row = h2hWins.get(g.playerId);
-        if (!row) continue;
-        for (const [opp, n] of row) {
-          if (ids.has(opp)) intraWins.set(g.playerId, (intraWins.get(g.playerId) ?? 0) + n);
-        }
+  if (t.format === 'ROUND_ROBIN') {
+    entries.sort((x, y) => y.matchPoints - x.matchPoints);
+    let start = 0;
+    while (start < entries.length) {
+      let end = start + 1;
+      while (end < entries.length && entries[end]!.matchPoints === entries[start]!.matchPoints) {
+        end++;
       }
-      group.sort((x, y) => {
-        const wx = intraWins.get(x.playerId) ?? 0;
-        const wy = intraWins.get(y.playerId) ?? 0;
-        if (wy !== wx) return wy - wx;
-        return fallback(x, y);
-      });
-      for (let k = 0; k < group.length; k++) entries[i + k] = group[k]!;
+      if (end - start > 1) {
+        const group = entries.slice(start, end);
+        const ids = new Set(group.map((entry) => entry.playerId));
+        const intraPoints = new Map<string, number>(group.map((entry) => [entry.playerId, 0]));
+        for (const match of t.matches) {
+          if (!isScoredMatch(match) || match.result === 'BYE') continue;
+          if (!match.playerAId || !match.playerBId || !ids.has(match.playerAId) || !ids.has(match.playerBId)) {
+            continue;
+          }
+          const a = match.playerAId;
+          const b = match.playerBId;
+          switch (match.result) {
+            case 'PLAYER_A_WIN':
+              intraPoints.set(a, intraPoints.get(a)! + t.settings.scoring.win);
+              intraPoints.set(b, intraPoints.get(b)! + t.settings.scoring.loss);
+              break;
+            case 'PLAYER_B_WIN':
+              intraPoints.set(a, intraPoints.get(a)! + t.settings.scoring.loss);
+              intraPoints.set(b, intraPoints.get(b)! + t.settings.scoring.win);
+              break;
+            case 'DRAW':
+              intraPoints.set(a, intraPoints.get(a)! + t.settings.scoring.draw);
+              intraPoints.set(b, intraPoints.get(b)! + t.settings.scoring.draw);
+              break;
+            case 'DOUBLE_LOSS':
+              intraPoints.set(a, intraPoints.get(a)! + t.settings.scoring.loss);
+              intraPoints.set(b, intraPoints.get(b)! + t.settings.scoring.loss);
+              break;
+            default:
+              break;
+          }
+        }
+        group.sort(
+          (x, y) =>
+            (intraPoints.get(y.playerId) ?? 0) - (intraPoints.get(x.playerId) ?? 0) ||
+            y.oppMatchWinPct - x.oppMatchWinPct ||
+            fallback(x, y),
+        );
+        for (let index = 0; index < group.length; index++) entries[start + index] = group[index]!;
+      }
+      start = end;
     }
-    i = j;
+  } else {
+    entries.sort((x, y) => {
+      if (y.matchPoints !== x.matchPoints) return y.matchPoints - x.matchPoints;
+      if (y.oppMatchWinPct !== x.oppMatchWinPct) return y.oppMatchWinPct - x.oppMatchWinPct;
+      return fallback(x, y);
+    });
+
+    // Resolve head-to-head inside groups tied on (points, opp%) where it is
+    // unambiguous: order subgroup members by wins against others in the group.
+    let i = 0;
+    while (i < entries.length) {
+      let j = i + 1;
+      while (
+        j < entries.length &&
+        entries[j]!.matchPoints === entries[i]!.matchPoints &&
+        entries[j]!.oppMatchWinPct === entries[i]!.oppMatchWinPct
+      ) {
+        j++;
+      }
+      if (j - i > 1) {
+        const group = entries.slice(i, j);
+        const ids = new Set(group.map((g) => g.playerId));
+        const intraWins = new Map<string, number>(group.map((g) => [g.playerId, 0]));
+        for (const g of group) {
+          const row = h2hWins.get(g.playerId);
+          if (!row) continue;
+          for (const [opp, n] of row) {
+            if (ids.has(opp)) intraWins.set(g.playerId, (intraWins.get(g.playerId) ?? 0) + n);
+          }
+        }
+        group.sort((x, y) => {
+          const wx = intraWins.get(x.playerId) ?? 0;
+          const wy = intraWins.get(y.playerId) ?? 0;
+          if (wy !== wx) return wy - wx;
+          return fallback(x, y);
+        });
+        for (let k = 0; k < group.length; k++) entries[i + k] = group[k]!;
+      }
+      i = j;
+    }
   }
 
   entries.forEach((e, idx) => {

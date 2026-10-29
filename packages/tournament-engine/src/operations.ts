@@ -17,10 +17,12 @@ import { cloneTournament, makeEvent, newId, now } from './model/util';
 import { getEngine, registerEngine } from './engine';
 import { mulberry32, shuffled } from './rng';
 import { singleEliminationEngine } from './formats/single-elimination';
+import { roundRobinEngine } from './formats/round-robin';
 import { swissEngine } from './formats/swiss';
 
 registerEngine(singleEliminationEngine);
 registerEngine(swissEngine);
+registerEngine(roundRobinEngine);
 
 // ---------------------------------------------------------------------------
 // Construction / setup
