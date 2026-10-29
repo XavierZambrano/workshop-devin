@@ -38,6 +38,8 @@ A working PoC covering both spec acceptance scenarios end-to-end:
   transitions, warnings, drops — live in `operations.ts` once.
 - **Derived statistics**: standings/Opp% are computed from match history on
   every render/call. No cached aggregates to invalidate.
+- **CSV player import**: a pure parser previews row errors before an atomic
+  draft import; manual seeds apply only with MANUAL seeding.
 - **Determinism**: a seeded mulberry32 PRNG drives random seeding; Swiss
   pairing is deterministic given the same state.
 - **Zustand + Dexie**: a single store applies engine ops and writes through to

@@ -1,5 +1,7 @@
 export * from './model/types';
 export * from './model/errors';
+export { parsePlayersCsv } from './import/csv';
+export type { CsvPlayerRow, CsvRowError, CsvSeparator, ParsedPlayersCsv } from './import/csv';
 export { mulberry32, shuffled } from './rng';
 export { pairSwiss, chooseByeCandidate } from './pairing/swiss';
 export type { PairingCandidate, PairingResult } from './pairing/swiss';
@@ -21,6 +23,7 @@ export {
   createTournament,
   updateTournamentSettings,
   addPlayer,
+  importPlayers,
   updatePlayer,
   removePlayer,
   reorderPlayers,
