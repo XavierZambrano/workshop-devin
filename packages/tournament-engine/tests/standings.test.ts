@@ -1,14 +1,31 @@
 import { describe, expect, it } from 'vitest';
 import { computeStandings } from '../src/standings';
-import { correctResult } from '../src/operations';
+import { correctResult, generateNextRound } from '../src/operations';
 import { playable, play, playerByName, startedTournament, names } from './helpers';
-import type { Tournament } from '../src/model/types';
+import type { Match, MatchResult, Tournament } from '../src/model/types';
 import { serializeTournament, deserializeTournament } from '../src/serialization';
 import { DomainError } from '../src/model/errors';
 
 function entry(t: Tournament, name: string) {
   const p = playerByName(t, name)!;
   return computeStandings(t).find((s) => s.playerId === p.id)!;
+}
+
+function completedMatch(
+  template: Match,
+  id: string,
+  playerAId: string,
+  playerBId: string | undefined,
+  result: MatchResult,
+): Match {
+  return {
+    ...template,
+    id,
+    playerAId,
+    playerBId,
+    result,
+    status: 'COMPLETE',
+  };
 }
 
 describe('statistics', () => {
@@ -39,6 +56,60 @@ describe('statistics', () => {
     expect(e.matchWinPct).toBe(0); // no real matches yet
   });
 
+  it('keeps Win% within 100% for a five-player Swiss with two rounds', () => {
+    let t = startedTournament('SWISS', names(5), { plannedRounds: 2 });
+    for (const m of playable(t)) t = play(t, m.id, 'PLAYER_A_WIN');
+    t = generateNextRound(t);
+    for (const m of playable(t)) t = play(t, m.id, 'PLAYER_A_WIN');
+
+    const standings = computeStandings(t);
+    expect(
+      standings.every(
+        (s) =>
+          s.matchWinPct >= 0 &&
+          s.matchWinPct <= 1 &&
+          s.oppMatchWinPct >= 0 &&
+          s.oppMatchWinPct <= 1,
+      ),
+    ).toBe(true);
+
+    const byeAndWin = standings.find((s) => s.byes === 1 && s.wins === 1)!;
+    expect(byeAndWin.matchPoints).toBe(6);
+    expect(byeAndWin.matchesPlayed).toBe(1);
+    expect(byeAndWin.matchWinPct).toBe(1);
+  });
+
+  it('includes bye points, uses played-match points for Win%, and floors Opp% at one-third', () => {
+    const initial = startedTournament('SWISS', names(3));
+    const playerOne = playerByName(initial, 'P1')!;
+    const playerTwo = playerByName(initial, 'P2')!;
+    const playerThree = playerByName(initial, 'P3')!;
+    const firstMatch = playable(initial)[0]!;
+    const bye = initial.matches.find((m) => m.result === 'BYE')!;
+    const secondLoss = completedMatch(
+      firstMatch,
+      'second-loss',
+      playerTwo.id,
+      playerThree.id,
+      'PLAYER_B_WIN',
+    );
+    const t: Tournament = {
+      ...initial,
+      matches: [
+        completedMatch(firstMatch, firstMatch.id, playerOne.id, playerTwo.id, 'PLAYER_A_WIN'),
+        completedMatch(bye, bye.id, playerOne.id, undefined, 'BYE'),
+        secondLoss,
+      ],
+    };
+
+    const playerOneStanding = computeStandings(t).find((s) => s.playerId === playerOne.id)!;
+    expect(playerOneStanding.byes).toBe(1);
+    expect(playerOneStanding.matchPoints).toBe(6);
+    expect(playerOneStanding.matchesPlayed).toBe(1);
+    expect(playerOneStanding.matchWinPct).toBe(1);
+    expect(playerOneStanding.oppMatchWinPct).toBe(1 / 3);
+  });
+
   it('computes Opp% as the average opponent match-win percentage', () => {
     let t = startedTournament('SWISS', names(4));
     const ms = playable(t); const m1 = ms[0]!; const m2 = ms[1]!;
@@ -46,12 +117,56 @@ describe('statistics', () => {
     t = play(t, m1!.id, 'PLAYER_A_WIN');
     t = play(t, m2!.id, 'DRAW');
 
-    // A's only opponent is B, who lost: B has 0 points in 1 match -> opp% 0.
+    // A's only opponent is B, who lost: the 33% floor applies to B's 0%.
     const a = entry(t, nameOf(t, m1!.playerAId!));
-    expect(a.oppMatchWinPct).toBe(0);
+    expect(a.oppMatchWinPct).toBeCloseTo(1 / 3);
     // C's opponent D drew: 1 point / (1*3) = 1/3.
     const c = entry(t, nameOf(t, m2!.playerAId!));
     expect(c.oppMatchWinPct).toBeCloseTo(1 / 3);
+  });
+
+  it('uses head-to-head for mathematically tied Opp% despite floating-point differences', () => {
+    const initial = startedTournament('SWISS', names(11));
+    const template = initial.matches[0]!;
+    const matches: Match[] = [];
+    const addMatch = (playerAName: string, playerBName: string, result: MatchResult) => {
+      const playerA = playerByName(initial, playerAName)!;
+      const playerB = playerByName(initial, playerBName)!;
+      matches.push(
+        completedMatch(template, `float-tie-${matches.length}`, playerA.id, playerB.id, result),
+      );
+    };
+
+    addMatch('P2', 'P1', 'PLAYER_A_WIN');
+    addMatch('P2', 'P3', 'PLAYER_B_WIN');
+    addMatch('P1', 'P4', 'PLAYER_A_WIN');
+    addMatch('P2', 'P5', 'DRAW');
+    addMatch('P2', 'P7', 'DRAW');
+    addMatch('P2', 'P6', 'DRAW');
+    addMatch('P1', 'P8', 'DRAW');
+    addMatch('P1', 'P10', 'DRAW');
+    addMatch('P1', 'P9', 'DRAW');
+    addMatch('P3', 'P11', 'PLAYER_B_WIN');
+    addMatch('P4', 'P11', 'PLAYER_A_WIN');
+    for (const name of ['P6', 'P10']) {
+      for (let i = 0; i < 10; i++) addMatch(name, 'P11', 'PLAYER_A_WIN');
+      for (let i = 0; i < 19; i++) addMatch(name, 'P11', 'PLAYER_B_WIN');
+    }
+
+    const standings = computeStandings({ ...initial, matches });
+    const playerTwoStanding = standings.find(
+      (s) => s.playerId === playerByName(initial, 'P2')!.id,
+    )!;
+    const playerOneStanding = standings.find(
+      (s) => s.playerId === playerByName(initial, 'P1')!.id,
+    )!;
+    expect(playerTwoStanding.matchPoints).toBe(playerOneStanding.matchPoints);
+    expect(playerTwoStanding.oppMatchWinPct).not.toBe(playerOneStanding.oppMatchWinPct);
+    expect(
+      Math.abs(playerTwoStanding.oppMatchWinPct - playerOneStanding.oppMatchWinPct),
+    ).toBeLessThan(1e-9);
+    expect(playerByName(initial, 'P2')!.seed).toBeGreaterThan(playerByName(initial, 'P1')!.seed!);
+    expect(playerTwoStanding.rank).toBeLessThan(playerOneStanding.rank);
   });
 
   it('double loss counts as a loss for both players', () => {
