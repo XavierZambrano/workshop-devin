@@ -275,11 +275,21 @@ function requireActive(t: Tournament) {
   }
 }
 
+function requireResultAllowed(t: Tournament, result: MatchResult) {
+  if (t.format === 'SINGLE_ELIMINATION' && (result === 'DRAW' || result === 'DOUBLE_LOSS')) {
+    throw new DomainError(
+      ErrorCodes.RESULT_NOT_ALLOWED_FOR_FORMAT,
+      'Single elimination needs a winner: draws and double losses are not allowed',
+    );
+  }
+}
+
 export function recordResult(t: Tournament, matchId: string, result: MatchResult): Tournament {
   requireActive(t);
   if (!ENTERABLE_RESULTS.includes(result)) {
     throw new DomainError(ErrorCodes.INVALID_RESULT, `Result ${result} cannot be entered manually`);
   }
+  requireResultAllowed(t, result);
   const d = draft(t);
   const m = d.matches.find((x) => x.id === matchId);
   if (!m) throw new DomainError(ErrorCodes.MATCH_NOT_FOUND, 'Match not found');
@@ -316,6 +326,7 @@ export function correctResult(t: Tournament, matchId: string, result: MatchResul
   if (!ENTERABLE_RESULTS.includes(result)) {
     throw new DomainError(ErrorCodes.INVALID_RESULT, `Result ${result} cannot be entered manually`);
   }
+  requireResultAllowed(t, result);
   const d = draft(t);
   const m = d.matches.find((x) => x.id === matchId);
   if (!m) throw new DomainError(ErrorCodes.MATCH_NOT_FOUND, 'Match not found');

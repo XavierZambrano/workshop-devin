@@ -86,7 +86,8 @@ export function assignSeeds(t: Tournament): Player[] {
 
 /** The player who advances/won a completed match, if any. */
 export function winnerOf(m: Match): string | undefined {
-  if (m.result === 'PLAYER_A_WIN' || m.result === 'BYE') return m.playerAId;
+  if (m.result === 'BYE') return m.playerAId ?? m.playerBId;
+  if (m.result === 'PLAYER_A_WIN') return m.playerAId;
   if (m.result === 'PLAYER_B_WIN') return m.playerBId;
   return undefined;
 }

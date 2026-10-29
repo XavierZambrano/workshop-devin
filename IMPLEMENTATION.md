@@ -50,9 +50,11 @@ A working PoC covering both spec acceptance scenarios end-to-end:
 - `PENALTY.DISQUALIFICATION` records the sanction; actual removal requires the
   explicit **Disqualify** action — the UI says so in the penalty dialog. This
   keeps "the resulting state change explicit and auditable" per spec.
-- SE draws/double-losses produce no winner; the downstream slot resolves as an
-  automatic bye (or voids if no players can reach it) so the bracket can never
-  wedge.
+- SE results must identify a winner: draws and double losses are rejected by
+  the engine and hidden in the UI. When a drop/DQ leaves a match with a single
+  player, that player advances by automatic bye or walkover regardless of which
+  bracket side they occupy (a bye-on-side-B previously left the bracket stuck
+  without a champion).
 - Corrections are permitted on completed tournaments (the SE final case):
   the champion is retracted and the dependent chain voided for re-entry.
 - Only one "active" tournament is surfaced; older ones stay in IndexedDB but
@@ -60,7 +62,7 @@ A working PoC covering both spec acceptance scenarios end-to-end:
 
 ## Test coverage
 
-47 tests across 4 files: bracket sizing (2/4/8/13/17/32), seed order, bye
+51 tests across 4 files: bracket sizing (2/4/8/13/17/32), seed order, bye
 assignment and top-seed distribution, advancement, champion, correction
 cascade, drop/DQ walkovers; Swiss round-1 split, score-group pairing, rematch
 and repeat-bye avoidance, drops/DQ exclusion, round gating, planned-round

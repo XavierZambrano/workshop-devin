@@ -74,9 +74,12 @@ function accumulate(t: Tournament): Map<string, Accumulator> {
 
     switch (m.result) {
       case 'BYE':
-        if (a) {
-          a.byes += 1;
-          a.matchPoints += scoring.bye;
+        {
+          const byePlayer = a ?? b;
+          if (byePlayer) {
+            byePlayer.byes += 1;
+            byePlayer.matchPoints += scoring.bye;
+          }
         }
         break;
       case 'PLAYER_A_WIN':
