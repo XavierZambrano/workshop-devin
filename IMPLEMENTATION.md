@@ -4,7 +4,7 @@
 
 A working PoC covering both spec acceptance scenarios end-to-end:
 
-- **Setup**: name, format (SE/Swiss), seeding mode (random / registration /
+- **Setup**: name, format (SE/Swiss/Round Robin), seeding mode (random / registration /
   manual ordering), Swiss round override with recommended default, player
   add/edit/remove/reorder with a `N / 32` counter and a 32-player cap.
 - **Single Elimination**: next-power-of-two bracket (2–32 players), top-seed
@@ -13,6 +13,9 @@ A working PoC covering both spec acceptance scenarios end-to-end:
 - **Swiss**: score-group pairing with rematch avoidance, group floating,
   single-bye handling for odd fields, repeat-bye avoidance, dropped/DQ
   exclusion, planned-round completion.
+- **Round Robin**: seed-ordered circle-method schedule with one match against
+  every opponent, pre-generated rounds, odd-field rests, and forfeit wins for
+  opponents of dropped or disqualified players.
 - **Results**: large touch-friendly entry buttons, corrections with an
   explicit warning when later state is affected; SE corrections void and
   reopen dependent matches (audited), Swiss corrections update standings only.
@@ -22,7 +25,8 @@ A working PoC covering both spec acceptance scenarios end-to-end:
   disqualifications with reason + round recorded.
 - **Audit**: append-only event log rendered in the History view.
 - **Persistence**: Dexie/IndexedDB autosave on every mutation, JSON
-  export/import with validation, reload-safe.
+  export/import with validation, reload-safe, and a saved-tournament picker
+  with open, rename, and confirmed delete actions.
 - **UI**: Tournament / Round / Standings / Bracket / Players / History nav;
   bracket shown only for single elimination.
 
@@ -47,6 +51,8 @@ A working PoC covering both spec acceptance scenarios end-to-end:
 
 - `matchWinPct`/`Opp%` exclude byes from the *denominator* (MTG convention):
   a bye grants points but is not a "played" match. Documented in README.
+- Round Robin uses Opp% as its game-win-percentage tiebreak because the data
+  model stores match results, not game scores.
 - `PENALTY.DISQUALIFICATION` records the sanction; actual removal requires the
   explicit **Disqualify** action — the UI says so in the penalty dialog. This
   keeps "the resulting state change explicit and auditable" per spec.
@@ -55,8 +61,8 @@ A working PoC covering both spec acceptance scenarios end-to-end:
   wedge.
 - Corrections are permitted on completed tournaments (the SE final case):
   the champion is retracted and the dependent chain voided for re-entry.
-- Only one "active" tournament is surfaced; older ones stay in IndexedDB but
-  there is no picker UI yet (noted as a next step).
+- Tournament names can be edited in any status; drafts use the engine settings
+  operation, while started tournaments update their saved metadata directly.
 
 ## Test coverage
 
@@ -70,10 +76,10 @@ end-to-end spec-scenario tests that also emit `sample-data/demo-*.json`.
 
 ## Remaining PoC limitations
 
-See "Known limitations" in the README — chiefly match-level results only, a
-minimal head-to-head application, and no multi-tournament picker.
+See "Known limitations" in the README — chiefly match-level results only and a
+minimal head-to-head application.
 
 ## Suggested next steps
 
-Game-level results → Swiss + Top Cut → double elimination / round robin
-engines → tournament picker → optional backend behind the same engine package.
+Game-level results → Swiss + Top Cut → double elimination engine → optional
+backend behind the same engine package.

@@ -72,6 +72,7 @@ export function isEliminated(t: Tournament, playerId: string): boolean {
  * Swiss: any subsequent round exists. SE: any resolved downstream match.
  */
 export function correctionRisk(t: Tournament, m: Match): string | null {
+  if (t.format === 'ROUND_ROBIN') return null;
   if (t.format === 'SWISS') {
     const later = t.rounds.some((r) => r.number > m.roundNumber);
     if (later) {

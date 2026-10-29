@@ -107,6 +107,62 @@ export function matchWinPct(a: { matchPoints: number; matchesPlayed: number }, w
   return a.matchPoints / (a.matchesPlayed * winPoints);
 }
 
+function rankRoundRobin(
+  entries: StandingEntry[],
+  t: Tournament,
+  fallback: (x: StandingEntry, y: StandingEntry) => number,
+): void {
+  entries.sort((x, y) => y.matchPoints - x.matchPoints);
+  let start = 0;
+  while (start < entries.length) {
+    let end = start + 1;
+    while (end < entries.length && entries[end]!.matchPoints === entries[start]!.matchPoints) {
+      end++;
+    }
+    if (end - start > 1) {
+      const group = entries.slice(start, end);
+      const ids = new Set(group.map((entry) => entry.playerId));
+      const intraPoints = new Map<string, number>(group.map((entry) => [entry.playerId, 0]));
+      for (const match of t.matches) {
+        if (!isScoredMatch(match) || match.result === 'BYE') continue;
+        if (!match.playerAId || !match.playerBId || !ids.has(match.playerAId) || !ids.has(match.playerBId)) {
+          continue;
+        }
+        const a = match.playerAId;
+        const b = match.playerBId;
+        switch (match.result) {
+          case 'PLAYER_A_WIN':
+            intraPoints.set(a, intraPoints.get(a)! + t.settings.scoring.win);
+            intraPoints.set(b, intraPoints.get(b)! + t.settings.scoring.loss);
+            break;
+          case 'PLAYER_B_WIN':
+            intraPoints.set(a, intraPoints.get(a)! + t.settings.scoring.loss);
+            intraPoints.set(b, intraPoints.get(b)! + t.settings.scoring.win);
+            break;
+          case 'DRAW':
+            intraPoints.set(a, intraPoints.get(a)! + t.settings.scoring.draw);
+            intraPoints.set(b, intraPoints.get(b)! + t.settings.scoring.draw);
+            break;
+          case 'DOUBLE_LOSS':
+            intraPoints.set(a, intraPoints.get(a)! + t.settings.scoring.loss);
+            intraPoints.set(b, intraPoints.get(b)! + t.settings.scoring.loss);
+            break;
+          default:
+            break;
+        }
+      }
+      group.sort(
+        (x, y) =>
+          (intraPoints.get(y.playerId) ?? 0) - (intraPoints.get(x.playerId) ?? 0) ||
+          y.oppMatchWinPct - x.oppMatchWinPct ||
+          fallback(x, y),
+      );
+      for (let index = 0; index < group.length; index++) entries[start + index] = group[index]!;
+    }
+    start = end;
+  }
+}
+
 /**
  * Opponent Match Win Percentage: the mean of each faced opponent's
  * match-win percentage. Byes are not opponents.
@@ -156,6 +212,14 @@ export function computeStandings(t: Tournament): StandingEntry[] {
     if (sx !== sy) return sx - sy;
     return x.playerId < y.playerId ? -1 : x.playerId > y.playerId ? 1 : 0;
   };
+
+  if (t.format === 'ROUND_ROBIN') {
+    rankRoundRobin(entries, t, fallback);
+    entries.forEach((e, idx) => {
+      e.rank = idx + 1;
+    });
+    return entries;
+  }
 
   entries.sort((x, y) => {
     if (y.matchPoints !== x.matchPoints) return y.matchPoints - x.matchPoints;

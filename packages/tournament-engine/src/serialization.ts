@@ -24,7 +24,7 @@ export function serializeTournament(t: Tournament): string {
   return JSON.stringify(envelope, null, 2);
 }
 
-const FORMATS = new Set(['SINGLE_ELIMINATION', 'SWISS']);
+const FORMATS = new Set(['SINGLE_ELIMINATION', 'SWISS', 'ROUND_ROBIN']);
 const T_STATUSES = new Set(['DRAFT', 'ACTIVE', 'COMPLETE']);
 const P_STATUSES = new Set(['ACTIVE', 'DROPPED', 'DISQUALIFIED']);
 const M_RESULTS = new Set(['PENDING', 'PLAYER_A_WIN', 'PLAYER_B_WIN', 'DRAW', 'DOUBLE_LOSS', 'BYE']);

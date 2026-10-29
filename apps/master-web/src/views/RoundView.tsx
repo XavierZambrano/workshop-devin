@@ -6,7 +6,7 @@ import { useApp } from '../store';
 import { playerName } from '../helpers';
 
 function currentRound(t: Tournament): Round | undefined {
-  // Prefer the earliest unfinished round (SE: later rounds are pre-generated).
+  // Prefer the earliest unfinished round in pre-generated schedules.
   return t.rounds.find((r) => r.status === 'ACTIVE') ?? t.rounds[t.rounds.length - 1];
 }
 
@@ -16,7 +16,13 @@ export function RoundView({ t }: { t: Tournament }) {
   const round = currentRound(t);
   const totalRounds =
     t.format === 'SWISS' ? (t.settings.plannedRounds ?? t.rounds.length) : t.rounds.length;
-  const pending = pendingMatchCount(t);
+  const pending =
+    t.format === 'ROUND_ROBIN' && round
+      ? t.matches.filter(
+          (match) =>
+            match.roundId === round.id && match.status !== 'COMPLETE' && match.status !== 'VOID',
+        ).length
+      : pendingMatchCount(t);
   const check = t.status === 'ACTIVE' ? canGenerateNextRound(t) : { ok: false };
 
   if (!round) {
@@ -34,6 +40,16 @@ export function RoundView({ t }: { t: Tournament }) {
   const playableMatches = matches.filter((m) => m.result !== 'BYE' && m.status !== 'VOID');
   const byeMatches = matches.filter((m) => m.result === 'BYE');
   const voidMatches = matches.filter((m) => m.status === 'VOID');
+  const restingPlayers =
+    t.format === 'ROUND_ROBIN'
+      ? t.players.filter(
+          (player) =>
+            player.status === 'ACTIVE' &&
+            !matches.some(
+              (match) => match.playerAId === player.id || match.playerBId === player.id,
+            ),
+        )
+      : [];
 
   return (
     <div className="mx-auto max-w-6xl space-y-5">
@@ -69,6 +85,12 @@ export function RoundView({ t }: { t: Tournament }) {
           <MatchCard key={m.id} t={t} m={m} />
         ))}
       </div>
+
+      {restingPlayers.length > 0 && (
+        <div className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-slate-300">
+          Resting this round: {restingPlayers.map((player) => player.displayName).join(', ')}
+        </div>
+      )}
 
       {(byeMatches.length > 0 || voidMatches.length > 0) && (
         <div className="grid gap-4 lg:grid-cols-2">

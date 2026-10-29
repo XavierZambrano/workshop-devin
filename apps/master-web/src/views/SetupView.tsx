@@ -120,11 +120,12 @@ function DraftSetup({ t }: { t: Tournament }) {
 
         <div className="mt-4">
           <span className="mb-2 block text-sm text-slate-400">Format</span>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-3 sm:grid-cols-3">
             {(
               [
                 ['SINGLE_ELIMINATION', 'Single Elimination', 'Bracket. Lose once and you are out.'],
                 ['SWISS', 'Swiss', 'Fixed rounds. Paired by score each round.'],
+                ['ROUND_ROBIN', 'Round Robin', 'Play every other player once.'],
               ] as Array<[TournamentFormat, string, string]>
             ).map(([value, label, desc]) => (
               <button
@@ -250,7 +251,9 @@ function DraftSetup({ t }: { t: Tournament }) {
             ? 'Add at least 2 players to start.'
             : t.format === 'SINGLE_ELIMINATION'
               ? 'A bracket will be generated on start.'
-              : `${planned} rounds will be played.`}
+              : t.format === 'SWISS'
+                ? `${planned} rounds will be played.`
+                : 'A complete round-robin schedule will be generated on start.'}
         </div>
         <button
           onClick={() => setStarting(true)}
@@ -264,7 +267,13 @@ function DraftSetup({ t }: { t: Tournament }) {
       {starting && (
         <ConfirmDialog
           title="Start tournament?"
-          body={`${t.players.length} players, ${t.format === 'SWISS' ? `Swiss, ${planned} rounds` : 'Single Elimination'}. Players cannot be added or removed after starting.`}
+          body={`${t.players.length} players, ${
+            t.format === 'SWISS'
+              ? `Swiss, ${planned} rounds`
+              : t.format === 'ROUND_ROBIN'
+                ? `Round Robin, ${t.players.length % 2 === 0 ? t.players.length - 1 : t.players.length} rounds`
+                : 'Single Elimination'
+          }. Players cannot be added or removed after starting.`}
           confirmLabel="Start"
           onConfirm={() => {
             mutate((d) => startTournament(d));
@@ -289,7 +298,9 @@ function setFormat(t: Tournament, format: TournamentFormat): Tournament {
 function TournamentOverview({ t }: { t: Tournament }) {
   const setView = useApp((s) => s.setView);
   const selectPlayer = useApp((s) => s.selectPlayer);
-  const currentRound = t.rounds.filter((r) => r.status !== 'PENDING').slice(-1)[0];
+  const currentRound =
+    t.rounds.find((r) => r.status === 'ACTIVE') ??
+    t.rounds.filter((r) => r.status !== 'PENDING').slice(-1)[0];
   const totalRounds =
     t.format === 'SWISS' ? (t.settings.plannedRounds ?? t.rounds.length) : t.rounds.length;
   const champion = t.championId ? t.players.find((p) => p.id === t.championId) : undefined;
@@ -300,7 +311,11 @@ function TournamentOverview({ t }: { t: Tournament }) {
         <div className="flex flex-wrap items-center gap-3">
           <h2 className="text-2xl font-bold">{t.name}</h2>
           <span className="rounded border border-sky-700 bg-sky-950/60 px-2 py-0.5 text-xs font-semibold text-sky-300">
-            {t.format === 'SWISS' ? 'Swiss' : 'Single Elimination'}
+            {t.format === 'SWISS'
+              ? 'Swiss'
+              : t.format === 'ROUND_ROBIN'
+                ? 'Round Robin'
+                : 'Single Elimination'}
           </span>
           <span
             className={`rounded border px-2 py-0.5 text-xs font-semibold ${

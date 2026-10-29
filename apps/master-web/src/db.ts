@@ -27,9 +27,27 @@ class TourneyDB extends Dexie {
 
 export const db = new TourneyDB();
 
+export async function listTournaments(): Promise<StoredTournament[]> {
+  return db.tournaments.orderBy('updatedAt').reverse().toArray();
+}
+
+export async function deleteTournament(id: string): Promise<void> {
+  await db.tournaments.delete(id);
+  const active = await db.meta.get('activeTournamentId');
+  if (active?.value === id) await db.meta.delete('activeTournamentId');
+}
+
+export async function setActiveTournamentId(id: string | null): Promise<void> {
+  if (id) {
+    await db.meta.put({ key: 'activeTournamentId', value: id });
+  } else {
+    await db.meta.delete('activeTournamentId');
+  }
+}
+
 export async function persistTournament(t: Tournament): Promise<void> {
   await db.tournaments.put({ id: t.id, updatedAt: t.updatedAt, data: t });
-  await db.meta.put({ key: 'activeTournamentId', value: t.id });
+  await setActiveTournamentId(t.id);
 }
 
 export async function loadActiveTournament(): Promise<Tournament | null> {
