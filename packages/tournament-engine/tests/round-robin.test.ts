@@ -176,6 +176,28 @@ describe('round robin results and standings', () => {
     ).toHaveLength(targetMatches.length - 1);
   });
 
+  it('records the active round when a player drops', () => {
+    const firstRound = startRoundRobin(['P1', 'P2', 'P3', 'P4', 'P5']);
+    const firstDropId = playerId(firstRound, 'P1');
+    const droppedInFirstRound = dropPlayer(firstRound, firstDropId, 'left');
+
+    expect(
+      droppedInFirstRound.players.find((player) => player.id === firstDropId)?.statusRoundNumber,
+    ).toBe(1);
+
+    let afterRoundOne = startRoundRobin(['P1', 'P2', 'P3', 'P4', 'P5']);
+    for (const match of afterRoundOne.matches.filter((item) => item.roundNumber === 1)) {
+      afterRoundOne = recordResult(afterRoundOne, match.id, 'PLAYER_A_WIN');
+    }
+    const secondDropId = playerId(afterRoundOne, 'P1');
+    const droppedInSecondRound = dropPlayer(afterRoundOne, secondDropId, 'left');
+
+    expect(afterRoundOne.rounds.find((round) => round.status === 'ACTIVE')?.number).toBe(2);
+    expect(
+      droppedInSecondRound.players.find((player) => player.id === secondDropId)?.statusRoundNumber,
+    ).toBe(2);
+  });
+
   it('uses head-to-head mini-table points to resolve a three-way points tie', () => {
     let t = startRoundRobin(['A', 'C', 'B', 'D', 'E']);
     for (const [a, b, result] of [

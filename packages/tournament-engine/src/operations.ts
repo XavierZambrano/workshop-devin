@@ -415,7 +415,7 @@ function emitRoundCompletions(d: Tournament, before: Tournament) {
 // ---------------------------------------------------------------------------
 
 function currentRoundNumber(t: Tournament): number | undefined {
-  return t.rounds[t.rounds.length - 1]?.number;
+  return (t.rounds.find((r) => r.status === 'ACTIVE') ?? t.rounds[t.rounds.length - 1])?.number;
 }
 
 export function dropPlayer(t: Tournament, playerId: string, reason?: string): Tournament {
